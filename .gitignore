@@ -47,5 +47,8 @@ app.*.map.json
 /android/app/release
 
 
+#macos 
+macos/
+
 # sdk path
 .fvm/flutter_sdk
