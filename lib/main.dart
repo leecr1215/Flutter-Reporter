@@ -45,9 +45,8 @@ class MyHomePage extends State<MainPage> {
     /* 파일 불러와서 imagePaths에 저장 */
     List files = Directory(nowPath).listSync();
     debugPrint('파일 길이: ${files.length}');
-    for (int i = 0; i < files.length; i++) {
-      imagePaths.add(files[i].toString());
-    }
+
+    files.map((file) => imagePaths.add(file.toString()));
   }
 
   @override
