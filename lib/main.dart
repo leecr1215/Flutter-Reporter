@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'fab.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,14 +18,37 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: MainPage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  MyHomePage({Key? key}) : super(key: key);
+class MainPage extends StatefulWidget {
+  @override
+  MyHomePage createState() => MyHomePage();
+}
+
+class MyHomePage extends State<MainPage> {
   final GlobalKey previewContainer = GlobalKey();
+  final List<String> imagePaths = [];
+
+  @override
+  void initState() {
+    getImagePaths();
+    super.initState();
+  }
+
+  void getImagePaths() async {
+    final directory = (await getApplicationDocumentsDirectory()).path;
+    String nowPath = '$directory/reporter';
+
+    /* 파일 불러와서 imagePaths에 저장 */
+    List files = Directory(nowPath).listSync();
+    debugPrint('파일 길이: ${files.length}');
+    for (int i = 0; i < files.length; i++) {
+      imagePaths.add(files[i].toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +67,7 @@ class MyHomePage extends StatelessWidget {
       ),
       floatingActionButton: FAB(
         previewContainer: previewContainer,
+        imagePaths: imagePaths,
       ),
     );
   }

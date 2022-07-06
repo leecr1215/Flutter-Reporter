@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter/rendering.Dart';
 import 'package:path_provider/path_provider.dart';
-import 'Dart:io';
+import 'dart:io';
 import 'Dart:async';
 import 'Dart:typed_data';
 import 'package:intl/intl.dart';
@@ -12,8 +12,11 @@ import 'screen_shot_controller.dart';
 
 class FAB extends StatelessWidget implements ScreenShotController {
   final GlobalKey previewContainer;
-  FAB({Key? key, required this.previewContainer}) : super(key: key);
-  List<String> imagePaths = [];
+  final List<String> imagePaths;
+
+  const FAB(
+      {Key? key, required this.previewContainer, required this.imagePaths})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +43,7 @@ class FAB extends StatelessWidget implements ScreenShotController {
             size: screenWidth * 0.13,
           ),
           onTap: () {
-            takeScreenShot(imagePaths);
+            takeScreenShot();
           },
         ),
         SpeedDialChild(
@@ -55,7 +58,30 @@ class FAB extends StatelessWidget implements ScreenShotController {
     );
   }
 
-  // TODO : 스크린 샷 찍는 함수 구현
+  /* 스크린 샷 찍는 함수 */
   @override
-  takeScreenShot(List<String> imagePaths) async {}
+  void takeScreenShot() async {
+    Future.delayed(const Duration(milliseconds: 10), () async {
+      if (previewContainer.currentContext != null) {
+        RenderRepaintBoundary? boundary = previewContainer.currentContext!
+            .findRenderObject() as RenderRepaintBoundary?;
+        ui.Image image = await boundary!.toImage();
+        final directory = (await getApplicationDocumentsDirectory()).path;
+        /* 이미지 저장할 폴더인 reporter 생성 */
+        Directory newDirectory =
+            await Directory('$directory/reporter').create(recursive: true);
+        ByteData? byteData =
+            await image.toByteData(format: ui.ImageByteFormat.png);
+        Uint8List pngBytes = byteData!.buffer.asUint8List();
+        DateTime now = DateTime.now();
+        String currentTime = DateFormat('yyyy-MM-dd_HH-mm-ss').format(now);
+        File imgFile =
+            File('$directory\\reporter/${currentTime}_screenshot.png');
+        imgFile.writeAsBytes(pngBytes);
+        imagePaths.add('$directory\\reporter/${currentTime}_screenshot.png');
+        debugPrint(imagePaths[0]);
+        debugPrint('${imagePaths.length}');
+      }
+    });
+  }
 }
