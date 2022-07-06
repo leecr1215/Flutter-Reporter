@@ -34,19 +34,21 @@ class MyHomePage extends State<MainPage> {
 
   @override
   void initState() {
-    getImagePaths();
+    Future<List> files = getImagePaths();
+    files.then((file) =>
+        {file.map((file) => imagePaths.add(file.toString())).toList()});
     super.initState();
   }
 
-  void getImagePaths() async {
+  Future<List> getImagePaths() async {
     final directory = (await getApplicationDocumentsDirectory()).path;
     String nowPath = '$directory/reporter';
 
     /* 파일 불러와서 imagePaths에 저장 */
-    List files = Directory(nowPath).listSync();
+    List<FileSystemEntity> files = Directory(nowPath).listSync();
     debugPrint('파일 길이: ${files.length}');
 
-    files.map((file) => imagePaths.add(file.toString()));
+    return files;
   }
 
   @override
@@ -61,7 +63,7 @@ class MyHomePage extends State<MainPage> {
         child: Container(
             width: screenWidth,
             height: screenHeight,
-            decoration: const BoxDecoration(color: Colors.blue),
+            decoration: const BoxDecoration(color: Colors.yellow),
             child: const Text("테스트 화면입니다.")),
       ),
       floatingActionButton: FAB(

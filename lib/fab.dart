@@ -76,11 +76,11 @@ class FAB extends StatelessWidget implements ScreenShotController {
         DateTime now = DateTime.now();
         String currentTime = DateFormat('yyyy-MM-dd_HH-mm-ss').format(now);
         File imgFile =
-            File('$directory\\reporter/${currentTime}_screenshot.png');
+            File('$directory/reporter/${currentTime}_screenshot.png');
         imgFile.writeAsBytes(pngBytes);
-        imagePaths.add('$directory\\reporter/${currentTime}_screenshot.png');
-        debugPrint(imagePaths[0]);
-        debugPrint('${imagePaths.length}');
+        imagePaths.add('$directory/reporter/${currentTime}_screenshot.png');
+        debugPrint(imagePaths[23]);
+        debugPrint('캡처 번호: ${imagePaths.length}');
       }
     });
   }
