@@ -12,17 +12,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Flutter Reporter',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+  MyHomePage({Key? key}) : super(key: key);
+  final GlobalKey previewContainer = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +32,17 @@ class MyHomePage extends StatelessWidget {
     double appBarHeight = AppBar().preferredSize.height;
 
     return Scaffold(
-      body: Container(
-          width: screenWidth,
-          height: screenHeight,
-          decoration: BoxDecoration(color: Colors.yellow),
-          child: Text("test 페이지입니다.")),
-      floatingActionButton: FAB(),
+      body: RepaintBoundary(
+        key: previewContainer,
+        child: Container(
+            width: screenWidth,
+            height: screenHeight,
+            decoration: const BoxDecoration(color: Colors.blue),
+            child: const Text("테스트 화면입니다.")),
+      ),
+      floatingActionButton: FAB(
+        previewContainer: previewContainer,
+      ),
     );
   }
 }
