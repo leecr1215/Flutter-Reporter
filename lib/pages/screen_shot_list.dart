@@ -107,7 +107,9 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
             onLongPress: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => BugReportWrite()),
+                MaterialPageRoute(
+                    builder: (context) => BugReportWrite(
+                        screenShotImage: widget.screenShotImage, index: index)),
               );
             },
             child: Image.file(imagePaths[index]));
