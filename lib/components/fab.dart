@@ -8,7 +8,8 @@ import 'Dart:async';
 import 'Dart:typed_data';
 import 'package:intl/intl.dart';
 import 'Dart:ui' as ui;
-import 'screen_shot_controller.dart';
+import '../controller/screen_shot_controller.dart';
+import '../pages/screenshot_list.dart';
 
 class FAB extends StatelessWidget implements ScreenShotController {
   final GlobalKey previewContainer;
@@ -53,7 +54,12 @@ class FAB extends StatelessWidget implements ScreenShotController {
               Icons.folder_open,
               size: screenWidth * 0.13,
             ),
-            onTap: () async {}),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ScreenshotListPage()),
+              );
+            }),
       ],
     );
   }
