@@ -49,3 +49,7 @@ app.*.map.json
 
 # sdk path
 .fvm/flutter_sdk
+
+
+#macos
+macos/
