@@ -44,6 +44,8 @@ class FAB extends StatelessWidget {
           ),
           onTap: () {
             screenShotImage.takeScreenShot();
+            ScaffoldMessenger.of(context)
+                .showSnackBar(const SnackBar(content: Text("스크린샷이 저장되었습니다.")));
           },
         ),
         SpeedDialChild(

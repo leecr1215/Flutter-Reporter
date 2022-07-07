@@ -34,6 +34,10 @@ class ScreenShotImage implements ScreenShotController {
     return _previewContainer;
   }
 
+  File getImageFile(int index) {
+    return _imagePaths[index];
+  }
+
   @override
   void takeScreenShot() async {
     Future.delayed(const Duration(milliseconds: 10), () async {

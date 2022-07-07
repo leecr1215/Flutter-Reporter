@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_reporter/components/back_fab.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter/rendering.Dart';
 import 'package:flutter/services.Dart';
@@ -10,6 +11,7 @@ import 'Dart:async';
 import 'Dart:typed_data';
 import 'Dart:ui' as ui;
 import '../controller/screen_shot_controller.dart';
+import 'bug_report_write.dart';
 
 class ScreenShotListPage extends StatefulWidget {
   ScreenShotImage screenShotImage;
@@ -84,16 +86,7 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
         ),
         floatingActionButton: Align(
           alignment: Alignment.bottomLeft,
-          child: Container(
-              width: screenWidth * 0.15,
-              height: screenWidth * 0.15,
-              margin: const EdgeInsets.only(left: 30),
-              child: FloatingActionButton(
-                  backgroundColor: Colors.black,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Icon(Icons.keyboard_backspace))),
+          child: const BackFAB(),
         ));
   }
 
@@ -103,14 +96,21 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
     final List<File> imagePaths = widget.screenShotImage.getImagePaths();
     return GridView.builder(
       itemCount: imagePaths.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 2 / 3,
         mainAxisSpacing: 15,
         crossAxisSpacing: 15,
       ),
       itemBuilder: (BuildContext context, int index) {
-        return Container(child: Image.file(imagePaths[index]));
+        return GestureDetector(
+            onLongPress: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BugReportWrite()),
+              );
+            },
+            child: Image.file(imagePaths[index]));
       },
     );
   }

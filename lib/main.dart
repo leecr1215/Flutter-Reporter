@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reporter/controller/screen_shot_controller.dart';
-import './components/fab.dart';
+import 'components/debug_fab.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
