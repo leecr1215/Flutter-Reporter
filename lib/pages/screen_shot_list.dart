@@ -6,12 +6,14 @@ import 'package:flutter/rendering.Dart';
 import 'package:flutter/services.Dart';
 import 'package:path_provider/path_provider.dart';
 import '../controller/screen_shot_list_loader.dart';
-import 'Dart:io';
-import 'Dart:async';
-import 'Dart:typed_data';
-import 'Dart:ui' as ui;
+import 'dart:io';
+import 'dart:async';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import '../controller/screen_shot_controller.dart';
 import 'bug_report_write.dart';
+import 'package:localstorage/localstorage.dart';
+import 'dart:convert';
 
 class ScreenShotListPage extends StatefulWidget {
   ScreenShotImage screenShotImage;
@@ -32,11 +34,31 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
   final _selectedColor = Color(0xff1a73e8);
   final _unselectedColor = Color(0xff5f6368);
   final _tabs = [Tab(text: '스크린샷'), Tab(text: '리포트')];
+  LocalStorage storage = LocalStorage('bug_report.json');
+  var items;
+  var keys;
+  Map<String, dynamic> map = {};
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
+    waitStorageReady();
     super.initState();
+  }
+
+  void waitStorageReady() async {
+    await storage.ready
+        .then((value) => storage = LocalStorage('bug_report.json'));
+
+    // Future.delayed(const Duration(milliseconds: 10), () async {
+    //   await storage.ready;
+    //   storage.ready.then((value) => {
+    //         map = jsonDecode(storage as String),
+    //         print(map)
+    //         //keys = Object.keys(storage)
+    //         //print(storage.)
+    //       });
+    // });
   }
 
   @override
@@ -51,10 +73,10 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double appBarHeight = AppBar().preferredSize.height;
-    print(imagePaths);
+    //print(imagePaths);
     return Scaffold(
         body: Container(
-          padding: EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(15.0),
           decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(10),
@@ -74,10 +96,7 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
               ),
               Expanded(
                 child: TabBarView(
-                  children: [
-                    showScreenShotList(),
-                    Text('${imagePaths.length}')
-                  ],
+                  children: [showScreenShotList(), Text('버그 리포트 페이지')],
                   controller: _tabController,
                 ),
               ),
