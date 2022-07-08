@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_reporter/components/back_fab.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:flutter/rendering.Dart';
-import 'package:flutter/services.Dart';
-import 'package:path_provider/path_provider.dart';
 import '../controller/screen_shot_list_loader.dart';
-import 'Dart:io';
-import 'Dart:async';
-import 'Dart:typed_data';
-import 'Dart:ui' as ui;
+import 'dart:io';
 import '../controller/screen_shot_controller.dart';
 import 'bug_report_write.dart';
 
