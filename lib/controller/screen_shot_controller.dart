@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter/rendering.Dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
-import 'Dart:async';
-import 'Dart:typed_data';
+import 'dart:async';
+import 'dart:typed_data';
 import 'package:intl/intl.dart';
-import 'Dart:ui' as ui;
-import '../controller/screen_shot_controller.dart';
-import '../pages/screen_shot_list.dart';
+import 'dart:ui' as ui;
 
 abstract class ScreenShotController {
   void takeScreenShot();
@@ -19,8 +16,6 @@ class ScreenShotImage implements ScreenShotController {
   final GlobalKey _previewContainer;
   List<File> _imagePaths;
   ScreenShotImage(this._previewContainer, this._imagePaths);
-  //GlobalKey get previewContainer => _previewContainer;
-  //set previewContainer(GlobalKey previewContainer) => _previewContainer = previewContainer;
 
   void setImagePaths(List<File> newImagePaths) {
     _imagePaths = newImagePaths;

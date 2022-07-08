@@ -1,16 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_reporter/components/back_fab.dart';
 import 'package:flutter_reporter/pages/screen_shot_list.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:flutter/rendering.Dart';
-import 'package:flutter/services.Dart';
-import 'package:path_provider/path_provider.dart';
-import '../controller/screen_shot_list_loader.dart';
-import 'Dart:io';
-import 'Dart:async';
-import 'Dart:typed_data';
-import 'Dart:ui' as ui;
+import 'dart:io';
 import '../controller/screen_shot_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:localstorage/localstorage.dart';
@@ -19,7 +10,8 @@ import '../controller/bug_report_controller.dart';
 class BugReportWrite extends StatefulWidget {
   final ScreenShotImage screenShotImage;
   final int index;
-  BugReportWrite({Key? key, required this.screenShotImage, required this.index})
+  const BugReportWrite(
+      {Key? key, required this.screenShotImage, required this.index})
       : super(key: key);
 
   @override
@@ -44,7 +36,7 @@ class _BugReportWriteState extends State<BugReportWrite>
     double screenHeight = MediaQuery.of(context).size.height;
     imageFile.add(widget.screenShotImage.getImageFile(widget.index));
     double space = screenHeight * 0.05;
-    print('인덱스 : ${widget.index}');
+    debugPrint('인덱스 : ${widget.index}');
     return Scaffold(
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -206,14 +198,6 @@ class _BugReportWriteState extends State<BugReportWrite>
             builder: (context) =>
                 ScreenShotListPage(screenShotImage: widget.screenShotImage)),
       );
-      print(title);
-      print(author);
-      print(content);
-      print(currentTime);
-
-      print(storage.getItem('bugs${widget.index}'));
-      print(storage.getItem('bugs0'));
-      print(storage.getItem('bug_report.json'));
     }
   }
 }

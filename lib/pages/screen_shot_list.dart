@@ -1,25 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_reporter/components/back_fab.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:flutter/rendering.Dart';
-import 'package:flutter/services.Dart';
-import 'package:path_provider/path_provider.dart';
 import '../controller/screen_shot_list_loader.dart';
 import 'dart:io';
-import 'dart:async';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 import '../controller/screen_shot_controller.dart';
 import 'bug_report_write.dart';
 import 'package:localstorage/localstorage.dart';
-import 'dart:convert';
 
 class ScreenShotListPage extends StatefulWidget {
   ScreenShotImage screenShotImage;
   ScreenShotListPage({Key? key, required this.screenShotImage})
       : super(key: key);
-  //final List<File> imagePaths;
 
   @override
   _ScreenShotListPageState createState() => _ScreenShotListPageState();
@@ -29,14 +19,12 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
     with SingleTickerProviderStateMixin
     implements ScreenShotListLoader {
   late TabController _tabController;
-  _ScreenShotListPageState({Key? key});
 
   final _selectedColor = Color(0xff1a73e8);
   final _unselectedColor = Color(0xff5f6368);
   final _tabs = [Tab(text: '스크린샷'), Tab(text: '리포트')];
   LocalStorage storage = LocalStorage('bug_report.json');
-  var items;
-  var keys;
+
   Map<String, dynamic> map = {};
 
   @override
@@ -49,16 +37,6 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
   void waitStorageReady() async {
     await storage.ready
         .then((value) => storage = LocalStorage('bug_report.json'));
-
-    // Future.delayed(const Duration(milliseconds: 10), () async {
-    //   await storage.ready;
-    //   storage.ready.then((value) => {
-    //         map = jsonDecode(storage as String),
-    //         print(map)
-    //         //keys = Object.keys(storage)
-    //         //print(storage.)
-    //       });
-    // });
   }
 
   @override

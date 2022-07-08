@@ -30,7 +30,6 @@ class MainPage extends StatefulWidget {
 }
 
 class MyHomePage extends State<MainPage> {
-  //final GlobalKey previewContainer = GlobalKey();
   final List<File> imagePaths = [];
   ScreenShotImage screenShotImage = ScreenShotImage(GlobalKey(), []);
 
@@ -42,7 +41,7 @@ class MyHomePage extends State<MainPage> {
           file.map((file) => imagePaths.add(file)).toList(),
           screenShotImage.setImagePaths(imagePaths)
         });
-    //screenShotImage.setImagePaths(imagePaths);
+
     print('가져온 imagePaths: ${screenShotImage.getImagePaths()}');
     super.initState();
   }
