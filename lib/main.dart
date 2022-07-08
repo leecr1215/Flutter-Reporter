@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'fab.dart';
+import 'package:flutter_reporter/controller/screen_shot_controller.dart';
+import 'components/debug_fab.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
@@ -29,14 +30,24 @@ class MainPage extends StatefulWidget {
 }
 
 class MyHomePage extends State<MainPage> {
-  final GlobalKey previewContainer = GlobalKey();
-  final List<String> imagePaths = [];
+  final List<File> imagePaths = [];
+  ScreenShotImage screenShotImage = ScreenShotImage(GlobalKey(), []);
 
   @override
   void initState() {
     Future<List> files = getImagePaths();
+<<<<<<< HEAD
     files.then((file) =>
         {file.map((file) => imagePaths.add(file.toString())).toList()});
+=======
+
+    files.then((file) => {
+          file.map((file) => imagePaths.add(file)).toList(),
+          screenShotImage.setImagePaths(imagePaths)
+        });
+
+    print('가져온 imagePaths: ${screenShotImage.getImagePaths()}');
+>>>>>>> feature/#6-show-screenshot-list
     super.initState();
   }
 
@@ -59,17 +70,23 @@ class MyHomePage extends State<MainPage> {
 
     return Scaffold(
       body: RepaintBoundary(
-        key: previewContainer,
+        key: screenShotImage.getGlobalKey(),
         child: Container(
             width: screenWidth,
             height: screenHeight,
+<<<<<<< HEAD
             decoration: const BoxDecoration(color: Colors.yellow),
             child: const Text("테스트 화면입니다.")),
       ),
       floatingActionButton: FAB(
         previewContainer: previewContainer,
         imagePaths: imagePaths,
+=======
+            decoration: const BoxDecoration(color: Colors.blue),
+            child: const Text("테스트 화면입니다")),
+>>>>>>> feature/#6-show-screenshot-list
       ),
+      floatingActionButton: FAB(screenShotImage: screenShotImage),
     );
   }
 }
