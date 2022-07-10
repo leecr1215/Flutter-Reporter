@@ -5,6 +5,8 @@ import 'dart:io';
 import '../controller/screen_shot_controller.dart';
 import 'bug_report_write.dart';
 import 'package:localstorage/localstorage.dart';
+import '../controller/bug_report_list_loader.dart';
+import 'bug_report_list.dart';
 
 class ScreenShotListPage extends StatefulWidget {
   ScreenShotImage screenShotImage;
@@ -74,7 +76,10 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
               ),
               Expanded(
                 child: TabBarView(
-                  children: [showScreenShotList(), Text('버그 리포트 페이지')],
+                  children: [
+                    showScreenShotList(),
+                    BugReportList(imagePaths: imagePaths)
+                  ],
                   controller: _tabController,
                 ),
               ),
@@ -89,7 +94,7 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
 
   @override
   GridView showScreenShotList() {
-    // TODO: 스크린샷 리스트 조회
+    // TODO: 스크린샷 리스트 조회 child
     final List<File> imagePaths = widget.screenShotImage.getImagePaths();
     return GridView.builder(
       itemCount: imagePaths.length,
@@ -110,6 +115,28 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
               );
             },
             child: Image.file(imagePaths[index]));
+      },
+    );
+  }
+
+  //@override
+  GridView showBugReportList() {
+    // TODO: 버그 리포트 리스트 조회 child
+    final List<File> imagePaths = widget.screenShotImage.getImagePaths();
+    return GridView.builder(
+      itemCount: imagePaths.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 2 / 3,
+        mainAxisSpacing: 15,
+        crossAxisSpacing: 15,
+      ),
+      itemBuilder: (BuildContext context, int index) {
+        return Column(
+          children: [
+            Image.file(imagePaths[index]),
+          ],
+        );
       },
     );
   }
