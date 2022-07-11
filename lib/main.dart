@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainPage(),
+      home: const MainPage(),
     );
   }
 }
@@ -43,7 +43,7 @@ class MyHomePage extends State<MainPage> {
           screenShotImage.setImagePaths(imagePaths)
         });
 
-    print('가져온 imagePaths: ${screenShotImage.getImagePaths()}');
+    debugPrint('가져온 imagePaths: ${screenShotImage.getImagePaths()}');
     super.initState();
   }
 

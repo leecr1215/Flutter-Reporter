@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:async';
@@ -33,7 +34,7 @@ class BugReport implements BugReportListLoader {
   }
 
   Map<String, dynamic> getValue(key) {
-    print('$key의 값은? : ${map[key][0]}');
+    debugPrint('$key의 값은? : ${map[key][0]}');
     return map[key][0];
   }
 

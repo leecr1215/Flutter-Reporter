@@ -30,12 +30,13 @@ class _BugReportListState extends State<BugReportList> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List keys = bugReport.keys;
+
           // 저장된 것이 없는 경우
           if (keys.isEmpty) {
             return const Text("저장된 버그 리포트가 없습니다.");
           } else {
             return GridView.builder(
-              itemCount: 5,
+              itemCount: keys.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 2 / 3,
