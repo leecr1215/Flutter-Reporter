@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
+  const MainPage({Key? key}) : super(key: key);
   @override
   MyHomePage createState() => MyHomePage();
 }
@@ -61,7 +62,6 @@ class MyHomePage extends State<MainPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double appBarHeight = AppBar().preferredSize.height;
 
     return Scaffold(
       body: RepaintBoundary(

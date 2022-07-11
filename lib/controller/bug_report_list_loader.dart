@@ -1,12 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/rendering.Dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'dart:async';
-import 'dart:typed_data';
-import 'package:intl/intl.dart';
-import 'dart:ui' as ui;
 import 'dart:convert';
 
 abstract class BugReportListLoader {
@@ -15,7 +9,7 @@ abstract class BugReportListLoader {
 
 class BugReport implements BugReportListLoader {
   List keys = [];
-  Map<String, dynamic> map = Map<String, dynamic>();
+  Map<String, dynamic> map = <String, dynamic>{};
 
   @override
   Future<Map<String, dynamic>> getReportList() async {
@@ -27,20 +21,19 @@ class BugReport implements BugReportListLoader {
       String jsonString = await jsonFile.readAsString();
 
       map = await jsonDecode(jsonString);
-      //getKeys();
+      getKeys();
     });
     return map;
   }
 
-  List getKeys() {
+  void getKeys() {
     map.forEach((key, value) {
       keys.add(key);
     });
-    return keys;
   }
 
   Map<String, dynamic> getValue(key) {
-    print('0번 key의 값은? : ${map[key][0]}');
+    print('$key의 값은? : ${map[key][0]}');
     return map[key][0];
   }
 

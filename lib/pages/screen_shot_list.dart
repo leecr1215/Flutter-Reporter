@@ -9,12 +9,11 @@ import '../controller/bug_report_list_loader.dart';
 import 'bug_report_list.dart';
 
 class ScreenShotListPage extends StatefulWidget {
-  ScreenShotImage screenShotImage;
-  ScreenShotListPage({Key? key, required this.screenShotImage})
+  final ScreenShotImage screenShotImage;
+  const ScreenShotListPage({Key? key, required this.screenShotImage})
       : super(key: key);
-
   @override
-  _ScreenShotListPageState createState() => _ScreenShotListPageState();
+  State<ScreenShotListPage> createState() => _ScreenShotListPageState();
 }
 
 class _ScreenShotListPageState extends State<ScreenShotListPage>
@@ -22,9 +21,9 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
     implements ScreenShotListLoader {
   late TabController _tabController;
 
-  final _selectedColor = Color(0xff1a73e8);
-  final _unselectedColor = Color(0xff5f6368);
-  final _tabs = [Tab(text: '스크린샷'), Tab(text: '리포트')];
+  final _selectedColor = const Color(0xff1a73e8);
+
+  final _tabs = [const Tab(text: '스크린샷'), const Tab(text: '리포트')];
   LocalStorage storage = LocalStorage('bug_report.json');
 
   Map<String, dynamic> map = {};
@@ -54,11 +53,8 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
   @override
   Widget build(BuildContext context) {
     BugReport bugReport = BugReport();
-    final List<File> imagePaths = widget.screenShotImage.getImagePaths();
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    double appBarHeight = AppBar().preferredSize.height;
-    print(bugReport.keys);
+
+    debugPrint(bugReport.keys.toString());
     return Scaffold(
         body: Container(
           padding: const EdgeInsets.all(15.0),
@@ -74,26 +70,26 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
                 labelColor: Colors.white,
                 tabs: _tabs,
                 controller: _tabController,
-                indicatorPadding: EdgeInsets.all(5.0),
+                indicatorPadding: const EdgeInsets.all(5.0),
                 indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     color: _selectedColor),
               ),
               Expanded(
                 child: TabBarView(
+                  controller: _tabController,
                   children: [
                     showScreenShotList(),
                     BugReportList(bugReport: bugReport)
                   ],
-                  controller: _tabController,
                 ),
               ),
             ],
           ),
         ),
-        floatingActionButton: Align(
+        floatingActionButton: const Align(
           alignment: Alignment.bottomLeft,
-          child: const BackFAB(),
+          child: BackFAB(),
         ));
   }
 
@@ -120,28 +116,6 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
               );
             },
             child: Image.file(imagePaths[index]));
-      },
-    );
-  }
-
-  //@override
-  GridView showBugReportList() {
-    // TODO: 버그 리포트 리스트 조회 child
-    final List<File> imagePaths = widget.screenShotImage.getImagePaths();
-    return GridView.builder(
-      itemCount: imagePaths.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 2 / 3,
-        mainAxisSpacing: 15,
-        crossAxisSpacing: 15,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return Column(
-          children: [
-            Image.file(imagePaths[index]),
-          ],
-        );
       },
     );
   }

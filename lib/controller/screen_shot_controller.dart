@@ -54,7 +54,7 @@ class ScreenShotImage implements ScreenShotController {
         imgFile.writeAsBytes(pngBytes);
         _imagePaths
             .add(File('$directory/reporter/${currentTime}_screenshot.png'));
-        //debugPrint(imagePaths[0]);
+
         debugPrint('캡처 번호: ${_imagePaths.length}');
       }
     });

@@ -15,7 +15,7 @@ class BugReportWrite extends StatefulWidget {
       : super(key: key);
 
   @override
-  _BugReportWriteState createState() => _BugReportWriteState();
+  State<BugReportWrite> createState() => _BugReportWriteState();
 }
 
 class _BugReportWriteState extends State<BugReportWrite>
@@ -113,12 +113,13 @@ class _BugReportWriteState extends State<BugReportWrite>
                   Padding(
                     padding: EdgeInsets.only(top: screenHeight * 0.02),
                     child: ElevatedButton(
-                        onPressed: saveItems,
-                        child: Text('저장'),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.black,
-                          minimumSize: Size(80, 50),
-                        )),
+                      onPressed: saveItems,
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black,
+                        minimumSize: const Size(80, 50),
+                      ),
+                      child: const Text('저장'),
+                    ),
                   )
                 ]),
           ),
@@ -163,10 +164,10 @@ class _BugReportWriteState extends State<BugReportWrite>
     list.items.add(item);
     saveToStorage();
 
-    // file을 string으로 바꾸고 다시 file로 바꿀 때 사용
-    print(File(imageFile[0]
+    // file을 string으로 바꿀 때 사용
+    debugPrint(imageFile[0]
         .toString()
-        .substring(7, imageFile[0].toString().length - 1)));
+        .substring(7, imageFile[0].toString().length - 1));
   }
 
   void saveToStorage() {
@@ -186,9 +187,8 @@ class _BugReportWriteState extends State<BugReportWrite>
   void saveItems() {
     // 빈칸 없는지 확인
     if (title == "" || author == "" || content == "") {
-      AlertDialog(title: Text("빈칸에러"), content: Text("빈칸 없이 입력해주세요"));
+      const AlertDialog(title: Text("빈칸에러"), content: Text("빈칸 없이 입력해주세요"));
     } else {
-      // 시간되면 저장된 리포트인지 아닌지 판단
       // 저장
       setTime();
       addItem();
