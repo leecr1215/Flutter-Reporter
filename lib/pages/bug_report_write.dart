@@ -184,7 +184,7 @@ class _BugReportWriteState extends State<BugReportWrite>
   void saveItems() {
     // 빈칸 없는지 확인
     if (title == "" || author == "" || content == "") {
-      AlertDialog(title: Text("빈칸에러"), content: Text("빈칸 없이 입력해주세요"));
+      alertDialog();
     } else {
       // 시간되면 저장된 리포트인지 아닌지 판단
       // 저장
@@ -199,5 +199,25 @@ class _BugReportWriteState extends State<BugReportWrite>
                 ScreenShotListPage(screenShotImage: widget.screenShotImage)),
       );
     }
+  }
+
+  Future<dynamic> alertDialog() {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            content: const Text("빈칸없이 작성해주세요"),
+            actions: [
+              Center(
+                  child: TextButton(
+                child: const Text("확인"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ))
+            ],
+          );
+        });
   }
 }
