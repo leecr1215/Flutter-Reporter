@@ -36,7 +36,7 @@ class _BugReportWriteState extends State<BugReportWrite>
     double screenHeight = MediaQuery.of(context).size.height;
     imageFile.add(widget.screenShotImage.getImageFile(widget.index));
     double space = screenHeight * 0.05;
-    debugPrint('인덱스 : ${widget.index}');
+    //debugPrint('인덱스 : ${widget.index}');
     return Scaffold(
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -157,7 +157,9 @@ class _BugReportWriteState extends State<BugReportWrite>
         author: author,
         content: content,
         currentTime: currentTime,
-        image: imageFile[0].toString());
+        image: imageFile[0]
+            .toString()
+            .substring(7, imageFile[0].toString().length - 1));
     list.items.add(item);
     saveToStorage();
 

@@ -29,10 +29,14 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
 
   Map<String, dynamic> map = {};
 
+  late BugReport bugReport;
+
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     waitStorageReady();
+    bugReport = BugReport();
+
     super.initState();
   }
 
@@ -49,11 +53,12 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
 
   @override
   Widget build(BuildContext context) {
+    BugReport bugReport = BugReport();
     final List<File> imagePaths = widget.screenShotImage.getImagePaths();
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double appBarHeight = AppBar().preferredSize.height;
-    //print(imagePaths);
+    print(bugReport.keys);
     return Scaffold(
         body: Container(
           padding: const EdgeInsets.all(15.0),
@@ -78,7 +83,7 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
                 child: TabBarView(
                   children: [
                     showScreenShotList(),
-                    BugReportList(imagePaths: imagePaths)
+                    BugReportList(bugReport: bugReport)
                   ],
                   controller: _tabController,
                 ),
