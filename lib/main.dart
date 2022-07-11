@@ -69,7 +69,7 @@ class MyHomePage extends State<MainPage> {
         child: Container(
             width: screenWidth,
             height: screenHeight,
-            decoration: const BoxDecoration(color: Colors.blue),
+            decoration: const BoxDecoration(color: Colors.lightBlue),
             child: const Text("테스트 화면입니다")),
       ),
       floatingActionButton: FAB(screenShotImage: screenShotImage),

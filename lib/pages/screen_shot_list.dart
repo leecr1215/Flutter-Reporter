@@ -95,6 +95,7 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
 
   @override
   GridView showScreenShotList() {
+    double screenHeight = MediaQuery.of(context).size.height;
     // TODO: 스크린샷 리스트 조회 child
     final List<File> imagePaths = widget.screenShotImage.getImagePaths();
     return GridView.builder(
@@ -115,7 +116,10 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
                         screenShotImage: widget.screenShotImage, index: index)),
               );
             },
-            child: Image.file(imagePaths[index]));
+            child: Image.file(
+              imagePaths[index],
+              fit: BoxFit.fill,
+            ));
       },
     );
   }

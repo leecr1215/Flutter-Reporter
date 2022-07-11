@@ -28,6 +28,7 @@ class BugReport implements BugReportListLoader {
   }
 
   void getKeys() {
+    keys = [];
     map.forEach((key, value) {
       keys.add(key);
     });
