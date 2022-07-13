@@ -24,6 +24,7 @@ class _BugReportListState extends State<BugReportList> {
 
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
     BugReport bugReport = widget.bugReport;
     return FutureBuilder<Map<String, dynamic>>(
       future: bugReport.getReportList(),
@@ -52,8 +53,10 @@ class _BugReportListState extends State<BugReportList> {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     Flexible(
-                      child: Image.file(File(bugReport.getImage(keys[index])),
-                          fit: BoxFit.contain),
+                      child: Image.file(
+                        File(bugReport.getImage(keys[index])),
+                        fit: BoxFit.fill,
+                      ),
                     ),
                     Text(bugReport.getCurrentTime(keys[index]),
                         style: const TextStyle(fontSize: 12))

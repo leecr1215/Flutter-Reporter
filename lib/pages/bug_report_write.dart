@@ -195,12 +195,7 @@ class _BugReportWriteState extends State<BugReportWrite>
       addItem();
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("리포트가 저장되었습니다. ")));
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                ScreenShotListPage(screenShotImage: widget.screenShotImage)),
-      );
+      Navigator.pop(context);
     }
   }
 

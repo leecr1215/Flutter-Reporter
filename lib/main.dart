@@ -20,6 +20,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const MainPage(),
+      // builder: (context, widget) {
+      //   return FloatingActionButton(onPressed: () {}, child: widget);
+      // },
     );
   }
 }
@@ -66,13 +69,74 @@ class MyHomePage extends State<MainPage> {
     return Scaffold(
       body: RepaintBoundary(
         key: screenShotImage.getGlobalKey(),
-        child: Container(
-            width: screenWidth,
-            height: screenHeight,
-            decoration: const BoxDecoration(color: Colors.lightBlue),
-            child: const Text("테스트 화면입니다")),
+        child: TestApp(screenWidth: screenWidth, screenHeight: screenHeight),
       ),
       floatingActionButton: FAB(screenShotImage: screenShotImage),
+      // bottomNavigationBar: BottomAppBar,
     );
+  }
+}
+
+class TestApp extends StatelessWidget {
+  const TestApp({
+    Key? key,
+    required this.screenWidth,
+    required this.screenHeight,
+  }) : super(key: key);
+
+  final double screenWidth;
+  final double screenHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: screenWidth,
+        height: screenHeight,
+        decoration: BoxDecoration(color: Colors.purple.shade100),
+        child: Column(
+          children: [
+            const Text("테스트 화면입니다"),
+            TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TestApp2(
+                            screenWidth: screenWidth,
+                            screenHeight: screenHeight)),
+                  );
+                },
+                child: Text("다음페이지로"))
+          ],
+        ));
+  }
+}
+
+class TestApp2 extends StatelessWidget {
+  const TestApp2({
+    Key? key,
+    required this.screenWidth,
+    required this.screenHeight,
+  }) : super(key: key);
+
+  final double screenWidth;
+  final double screenHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: screenWidth,
+        height: screenHeight,
+        decoration: BoxDecoration(color: Colors.yellow),
+        child: Column(
+          children: [
+            const Text("테스트 화면입니다"),
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("전페이지로"))
+          ],
+        ));
   }
 }
