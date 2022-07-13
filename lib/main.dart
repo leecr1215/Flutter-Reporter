@@ -36,6 +36,10 @@ class MyHomePage extends State<MainPage> {
   @override
   void initState() {
     Future<List> files = getImagePaths();
+<<<<<<< HEAD
+    files.then((file) =>
+        {file.map((file) => imagePaths.add(file.toString())).toList()});
+=======
 
     files.then((file) => {
           file.map((file) => imagePaths.add(file)).toList(),
@@ -43,6 +47,7 @@ class MyHomePage extends State<MainPage> {
         });
 
     print('가져온 imagePaths: ${screenShotImage.getImagePaths()}');
+>>>>>>> feature/#6-show-screenshot-list
     super.initState();
   }
 
@@ -69,8 +74,17 @@ class MyHomePage extends State<MainPage> {
         child: Container(
             width: screenWidth,
             height: screenHeight,
+<<<<<<< HEAD
+            decoration: const BoxDecoration(color: Colors.yellow),
+            child: const Text("테스트 화면입니다.")),
+      ),
+      floatingActionButton: FAB(
+        previewContainer: previewContainer,
+        imagePaths: imagePaths,
+=======
             decoration: const BoxDecoration(color: Colors.blue),
             child: const Text("테스트 화면입니다")),
+>>>>>>> feature/#6-show-screenshot-list
       ),
       floatingActionButton: FAB(screenShotImage: screenShotImage),
     );
