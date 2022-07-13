@@ -16,6 +16,7 @@ class ScreenShotImage implements ScreenShotController {
   final GlobalKey _previewContainer;
   List<File> _imagePaths;
   ScreenShotImage(this._previewContainer, this._imagePaths);
+
   void setImagePaths(List<File> newImagePaths) {
     _imagePaths = newImagePaths;
   }

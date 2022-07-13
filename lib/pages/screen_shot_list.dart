@@ -4,12 +4,12 @@ import '../controller/screen_shot_list_loader.dart';
 import 'dart:io';
 import '../controller/screen_shot_controller.dart';
 import 'bug_report_write.dart';
+import 'package:localstorage/localstorage.dart';
 
 class ScreenShotListPage extends StatefulWidget {
   ScreenShotImage screenShotImage;
   ScreenShotListPage({Key? key, required this.screenShotImage})
       : super(key: key);
-  //final List<File> imagePaths;
 
   @override
   _ScreenShotListPageState createState() => _ScreenShotListPageState();
@@ -19,16 +19,24 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
     with SingleTickerProviderStateMixin
     implements ScreenShotListLoader {
   late TabController _tabController;
-  _ScreenShotListPageState({Key? key});
 
   final _selectedColor = Color(0xff1a73e8);
   final _unselectedColor = Color(0xff5f6368);
   final _tabs = [Tab(text: '스크린샷'), Tab(text: '리포트')];
+  LocalStorage storage = LocalStorage('bug_report.json');
+
+  Map<String, dynamic> map = {};
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
+    waitStorageReady();
     super.initState();
+  }
+
+  void waitStorageReady() async {
+    await storage.ready
+        .then((value) => storage = LocalStorage('bug_report.json'));
   }
 
   @override
@@ -43,10 +51,10 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     double appBarHeight = AppBar().preferredSize.height;
-    print(imagePaths);
+    //print(imagePaths);
     return Scaffold(
         body: Container(
-          padding: EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(15.0),
           decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(10),
@@ -66,10 +74,7 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
               ),
               Expanded(
                 child: TabBarView(
-                  children: [
-                    showScreenShotList(),
-                    Text('${imagePaths.length}')
-                  ],
+                  children: [showScreenShotList(), Text('버그 리포트 페이지')],
                   controller: _tabController,
                 ),
               ),
@@ -99,7 +104,9 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
             onLongPress: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => BugReportWrite()),
+                MaterialPageRoute(
+                    builder: (context) => BugReportWrite(
+                        screenShotImage: widget.screenShotImage, index: index)),
               );
             },
             child: Image.file(imagePaths[index]));
