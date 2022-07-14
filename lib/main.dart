@@ -69,7 +69,10 @@ class MyHomePage extends State<MainPage> {
     return Scaffold(
       body: RepaintBoundary(
         key: screenShotImage.getGlobalKey(),
+
         child: TestApp(screenWidth: screenWidth, screenHeight: screenHeight),
+            decoration: const BoxDecoration(color: Colors.yellow),
+            child: const Text("테스트 화면입니다.")),
       ),
       floatingActionButton: FAB(screenShotImage: screenShotImage),
       // bottomNavigationBar: BottomAppBar,
