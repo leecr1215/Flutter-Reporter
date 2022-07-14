@@ -6,12 +6,17 @@ import '../controller/screen_shot_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:localstorage/localstorage.dart';
 import '../controller/bug_report_controller.dart';
+import '../controller/metadata_controller.dart';
 
 class BugReportWrite extends StatefulWidget {
   final ScreenShotImage screenShotImage;
   final int index;
+  final MetaDataInfo metaDataInfo;
   const BugReportWrite(
-      {Key? key, required this.screenShotImage, required this.index})
+      {Key? key,
+      required this.screenShotImage,
+      required this.index,
+      required this.metaDataInfo})
       : super(key: key);
 
   @override
@@ -120,7 +125,7 @@ class _BugReportWriteState extends State<BugReportWrite>
                       ),
                       child: const Text('저장'),
                     ),
-                  )
+                  ),
                 ]),
           ),
         ),

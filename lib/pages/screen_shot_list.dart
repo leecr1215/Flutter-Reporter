@@ -7,6 +7,7 @@ import 'bug_report_write.dart';
 import 'package:localstorage/localstorage.dart';
 import '../controller/bug_report_list_loader.dart';
 import 'bug_report_list.dart';
+import '../controller/metadata_controller.dart';
 
 class ScreenShotListPage extends StatefulWidget {
   final ScreenShotImage screenShotImage;
@@ -29,12 +30,14 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
   Map<String, dynamic> map = {};
 
   late BugReport bugReport;
+  late MetaDataInfo metaDataInfo;
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     waitStorageReady();
     bugReport = BugReport();
+    metaDataInfo = MetaDataInfo();
 
     super.initState();
   }
@@ -114,7 +117,10 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
                 context,
                 MaterialPageRoute(
                     builder: (context) => BugReportWrite(
-                        screenShotImage: widget.screenShotImage, index: index)),
+                          screenShotImage: widget.screenShotImage,
+                          index: index,
+                          metaDataInfo: metaDataInfo,
+                        )),
               );
             },
             child: Image.file(

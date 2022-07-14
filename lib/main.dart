@@ -93,7 +93,7 @@ class MyHomePage extends State<MainPage> {
 }
 
 class TestApp extends StatelessWidget {
-  const TestApp({
+  TestApp({
     Key? key,
     required this.screenWidth,
     required this.screenHeight,
