@@ -50,11 +50,11 @@ class ScreenShotImage implements ScreenShotController {
         DateTime now = DateTime.now();
         String currentTime = DateFormat('yyyy-MM-dd_HH-mm-ss').format(now);
         File imgFile =
-            File('$directory\\reporter/${currentTime}_screenshot.png');
+            File('$directory/reporter/${currentTime}_screenshot.png');
         imgFile.writeAsBytes(pngBytes);
         _imagePaths
             .add(File('$directory/reporter/${currentTime}_screenshot.png'));
-        //debugPrint(imagePaths[0]);
+
         debugPrint('캡처 번호: ${_imagePaths.length}');
       }
     });

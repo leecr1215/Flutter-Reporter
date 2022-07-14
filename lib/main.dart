@@ -19,12 +19,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainPage(),
+      home: const MainPage(),
+      // builder: (context, widget) {
+      //   return FloatingActionButton(onPressed: () {}, child: widget);
+      // },
     );
   }
 }
 
 class MainPage extends StatefulWidget {
+  const MainPage({Key? key}) : super(key: key);
   @override
   MyHomePage createState() => MyHomePage();
 }
@@ -36,18 +40,13 @@ class MyHomePage extends State<MainPage> {
   @override
   void initState() {
     Future<List> files = getImagePaths();
-<<<<<<< HEAD
-    files.then((file) =>
-        {file.map((file) => imagePaths.add(file.toString())).toList()});
-=======
 
     files.then((file) => {
           file.map((file) => imagePaths.add(file)).toList(),
           screenShotImage.setImagePaths(imagePaths)
         });
 
-    print('가져온 imagePaths: ${screenShotImage.getImagePaths()}');
->>>>>>> feature/#6-show-screenshot-list
+    debugPrint('가져온 imagePaths: ${screenShotImage.getImagePaths()}');
     super.initState();
   }
 
@@ -66,27 +65,81 @@ class MyHomePage extends State<MainPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    double appBarHeight = AppBar().preferredSize.height;
 
     return Scaffold(
       body: RepaintBoundary(
         key: screenShotImage.getGlobalKey(),
-        child: Container(
-            width: screenWidth,
-            height: screenHeight,
-<<<<<<< HEAD
+
+        child: TestApp(screenWidth: screenWidth, screenHeight: screenHeight),
             decoration: const BoxDecoration(color: Colors.yellow),
             child: const Text("테스트 화면입니다.")),
       ),
-      floatingActionButton: FAB(
-        previewContainer: previewContainer,
-        imagePaths: imagePaths,
-=======
-            decoration: const BoxDecoration(color: Colors.blue),
-            child: const Text("테스트 화면입니다")),
->>>>>>> feature/#6-show-screenshot-list
-      ),
       floatingActionButton: FAB(screenShotImage: screenShotImage),
+      // bottomNavigationBar: BottomAppBar,
     );
+  }
+}
+
+class TestApp extends StatelessWidget {
+  const TestApp({
+    Key? key,
+    required this.screenWidth,
+    required this.screenHeight,
+  }) : super(key: key);
+
+  final double screenWidth;
+  final double screenHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: screenWidth,
+        height: screenHeight,
+        decoration: BoxDecoration(color: Colors.purple.shade100),
+        child: Column(
+          children: [
+            const Text("테스트 화면입니다"),
+            TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TestApp2(
+                            screenWidth: screenWidth,
+                            screenHeight: screenHeight)),
+                  );
+                },
+                child: Text("다음페이지로"))
+          ],
+        ));
+  }
+}
+
+class TestApp2 extends StatelessWidget {
+  const TestApp2({
+    Key? key,
+    required this.screenWidth,
+    required this.screenHeight,
+  }) : super(key: key);
+
+  final double screenWidth;
+  final double screenHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: screenWidth,
+        height: screenHeight,
+        decoration: BoxDecoration(color: Colors.yellow),
+        child: Column(
+          children: [
+            const Text("테스트 화면입니다"),
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("전페이지로"))
+          ],
+        ));
   }
 }

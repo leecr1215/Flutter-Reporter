@@ -5,14 +5,15 @@ import 'dart:io';
 import '../controller/screen_shot_controller.dart';
 import 'bug_report_write.dart';
 import 'package:localstorage/localstorage.dart';
+import '../controller/bug_report_list_loader.dart';
+import 'bug_report_list.dart';
 
 class ScreenShotListPage extends StatefulWidget {
-  ScreenShotImage screenShotImage;
-  ScreenShotListPage({Key? key, required this.screenShotImage})
+  final ScreenShotImage screenShotImage;
+  const ScreenShotListPage({Key? key, required this.screenShotImage})
       : super(key: key);
-
   @override
-  _ScreenShotListPageState createState() => _ScreenShotListPageState();
+  State<ScreenShotListPage> createState() => _ScreenShotListPageState();
 }
 
 class _ScreenShotListPageState extends State<ScreenShotListPage>
@@ -20,17 +21,21 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
     implements ScreenShotListLoader {
   late TabController _tabController;
 
-  final _selectedColor = Color(0xff1a73e8);
-  final _unselectedColor = Color(0xff5f6368);
-  final _tabs = [Tab(text: '스크린샷'), Tab(text: '리포트')];
+  final _selectedColor = const Color(0xff1a73e8);
+
+  final _tabs = [const Tab(text: '스크린샷'), const Tab(text: '리포트')];
   LocalStorage storage = LocalStorage('bug_report.json');
 
   Map<String, dynamic> map = {};
+
+  late BugReport bugReport;
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     waitStorageReady();
+    bugReport = BugReport();
+
     super.initState();
   }
 
@@ -47,11 +52,9 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
 
   @override
   Widget build(BuildContext context) {
-    final List<File> imagePaths = widget.screenShotImage.getImagePaths();
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    double appBarHeight = AppBar().preferredSize.height;
-    //print(imagePaths);
+    BugReport bugReport = BugReport();
+
+    debugPrint(bugReport.keys.toString());
     return Scaffold(
         body: Container(
           padding: const EdgeInsets.all(15.0),
@@ -67,29 +70,32 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
                 labelColor: Colors.white,
                 tabs: _tabs,
                 controller: _tabController,
-                indicatorPadding: EdgeInsets.all(5.0),
+                indicatorPadding: const EdgeInsets.all(5.0),
                 indicator: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     color: _selectedColor),
               ),
               Expanded(
                 child: TabBarView(
-                  children: [showScreenShotList(), Text('버그 리포트 페이지')],
                   controller: _tabController,
+                  children: [
+                    showScreenShotList(),
+                    BugReportList(bugReport: bugReport)
+                  ],
                 ),
               ),
             ],
           ),
         ),
-        floatingActionButton: Align(
+        floatingActionButton: const Align(
           alignment: Alignment.bottomLeft,
-          child: const BackFAB(),
+          child: BackFAB(),
         ));
   }
 
   @override
   GridView showScreenShotList() {
-    // TODO: 스크린샷 리스트 조회
+    // TODO: 스크린샷 리스트 조회 child
     final List<File> imagePaths = widget.screenShotImage.getImagePaths();
     return GridView.builder(
       itemCount: imagePaths.length,
@@ -109,7 +115,10 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
                         screenShotImage: widget.screenShotImage, index: index)),
               );
             },
-            child: Image.file(imagePaths[index]));
+            child: Image.file(
+              imagePaths[index],
+              fit: BoxFit.fill,
+            ));
       },
     );
   }

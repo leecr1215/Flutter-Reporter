@@ -15,7 +15,7 @@ class BugReportWrite extends StatefulWidget {
       : super(key: key);
 
   @override
-  _BugReportWriteState createState() => _BugReportWriteState();
+  State<BugReportWrite> createState() => _BugReportWriteState();
 }
 
 class _BugReportWriteState extends State<BugReportWrite>
@@ -36,7 +36,7 @@ class _BugReportWriteState extends State<BugReportWrite>
     double screenHeight = MediaQuery.of(context).size.height;
     imageFile.add(widget.screenShotImage.getImageFile(widget.index));
     double space = screenHeight * 0.05;
-    debugPrint('인덱스 : ${widget.index}');
+    //debugPrint('인덱스 : ${widget.index}');
     return Scaffold(
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
@@ -113,12 +113,13 @@ class _BugReportWriteState extends State<BugReportWrite>
                   Padding(
                     padding: EdgeInsets.only(top: screenHeight * 0.02),
                     child: ElevatedButton(
-                        onPressed: saveItems,
-                        child: Text('저장'),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.black,
-                          minimumSize: Size(80, 50),
-                        )),
+                      onPressed: saveItems,
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black,
+                        minimumSize: const Size(80, 50),
+                      ),
+                      child: const Text('저장'),
+                    ),
                   )
                 ]),
           ),
@@ -147,7 +148,7 @@ class _BugReportWriteState extends State<BugReportWrite>
   void setTime() {
     setState(() {
       DateTime now = DateTime.now();
-      currentTime = DateFormat('yyyy/MM/dd,HH시 mm분 ss초').format(now);
+      currentTime = DateFormat('yyyy/MM/dd, HH:mm:ss').format(now);
     });
   }
 
@@ -157,14 +158,16 @@ class _BugReportWriteState extends State<BugReportWrite>
         author: author,
         content: content,
         currentTime: currentTime,
-        image: imageFile[0].toString());
+        image: imageFile[0]
+            .toString()
+            .substring(7, imageFile[0].toString().length - 1));
     list.items.add(item);
     saveToStorage();
 
-    // file을 string으로 바꾸고 다시 file로 바꿀 때 사용
-    print(File(imageFile[0]
+    // file을 string으로 바꿀 때 사용
+    debugPrint(imageFile[0]
         .toString()
-        .substring(7, imageFile[0].toString().length - 1)));
+        .substring(7, imageFile[0].toString().length - 1));
   }
 
   void saveToStorage() {
@@ -192,12 +195,7 @@ class _BugReportWriteState extends State<BugReportWrite>
       addItem();
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("리포트가 저장되었습니다. ")));
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                ScreenShotListPage(screenShotImage: widget.screenShotImage)),
-      );
+      Navigator.pop(context);
     }
   }
 
