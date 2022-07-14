@@ -67,12 +67,27 @@ class MyHomePage extends State<MainPage> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: RepaintBoundary(
-        key: screenShotImage.getGlobalKey(),
-        child: TestApp(screenWidth: screenWidth, screenHeight: screenHeight),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Navigator(
+              onGenerateRoute: (routeSettings) {
+                return MaterialPageRoute(
+                    builder: (context) => RepaintBoundary(
+                        key: screenShotImage.getGlobalKey(),
+                        child: TestApp(
+                            screenWidth: screenWidth,
+                            screenHeight: screenHeight)));
+              },
+            ),
+            Positioned(
+              bottom: 15,
+              right: 15,
+              child: FAB(screenShotImage: screenShotImage),
+            )
+          ],
+        ),
       ),
-      floatingActionButton: FAB(screenShotImage: screenShotImage),
-      // bottomNavigationBar: BottomAppBar,
     );
   }
 }
@@ -95,7 +110,7 @@ class TestApp extends StatelessWidget {
         decoration: BoxDecoration(color: Colors.purple.shade100),
         child: Column(
           children: [
-            const Text("테스트 화면입니다"),
+            const Text("테스트 화면1입니다"),
             TextButton(
                 onPressed: () {
                   Navigator.push(
@@ -130,7 +145,47 @@ class TestApp2 extends StatelessWidget {
         decoration: BoxDecoration(color: Colors.yellow),
         child: Column(
           children: [
-            const Text("테스트 화면입니다"),
+            const Text("테스트 화면2입니다"),
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("전페이지로")),
+            TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TestApp3(
+                            screenWidth: screenWidth,
+                            screenHeight: screenHeight)),
+                  );
+                },
+                child: Text("다음페이지로"))
+          ],
+        ));
+  }
+}
+
+class TestApp3 extends StatelessWidget {
+  const TestApp3({
+    Key? key,
+    required this.screenWidth,
+    required this.screenHeight,
+  }) : super(key: key);
+
+  final double screenWidth;
+  final double screenHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: screenWidth,
+        height: screenHeight,
+        decoration: BoxDecoration(color: Colors.orange),
+        child: Column(
+          children: [
+            const Text("테스트 화면3입니다"),
             TextButton(
                 onPressed: () {
                   Navigator.pop(context);
