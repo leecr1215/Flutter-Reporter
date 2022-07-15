@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reporter/components/back_fab.dart';
-import 'package:flutter_reporter/pages/screen_shot_list.dart';
 import 'dart:io';
 import '../controller/screen_shot_controller.dart';
 import 'package:intl/intl.dart';
@@ -40,93 +39,173 @@ class _BugReportWriteState extends State<BugReportWrite>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     imageFile.add(widget.screenShotImage.getImageFile(widget.index));
-    double space = screenHeight * 0.05;
+    double space = screenHeight * 0.03;
     //debugPrint('인덱스 : ${widget.index}');
     return Scaffold(
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: SingleChildScrollView(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(space),
-                    child: Image.file(
-                      imageFile[0],
-                      width: screenWidth * 0.8,
-                      height: screenHeight * 0.4,
-                      fit: BoxFit.contain,
+            child: SafeArea(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(space),
+                      child: Image.file(
+                        imageFile[0],
+                        width: screenWidth * 0.6,
+                        height: screenHeight * 0.4,
+                        fit: BoxFit.contain,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(space, 0, space, space),
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        hintText: '제목을 입력해주세요',
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            borderSide:
-                                BorderSide(width: 1, color: Colors.black)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(space, 0, space, space),
+                        // child: Column(
+                        //   children: [
+                        //     Text("os : ${widget.metaDataInfo.os}"),
+                        //     Text("version : ${widget.metaDataInfo.osVersion}"),
+                        //     Text("model: ${widget.metaDataInfo.osModel}"),
+                        //     Text("sdk: ${widget.metaDataInfo.sdk}"),
+                        //   ],
+                        // ),
+                        child: Table(
+                          border: TableBorder.all(),
+                          defaultVerticalAlignment:
+                              TableCellVerticalAlignment.middle,
+                          columnWidths: const {
+                            0: FlexColumnWidth(2),
+                            1: FlexColumnWidth(3),
+                          },
+                          children: <TableRow>[
+                            TableRow(children: [
+                              Container(
+                                  height: 25,
+                                  //color: Colors.grey.shade400,
+                                  alignment: Alignment.center,
+                                  child: const Text("os version",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold))),
+                              Container(
+                                height: 25,
+                                alignment: Alignment.center,
+                                child: Text(
+                                    "${widget.metaDataInfo.os} ${widget.metaDataInfo.osVersion}"),
+                              ),
+                            ]),
+                            TableRow(children: [
+                              Container(
+                                  height: 25,
+                                  alignment: Alignment.center,
+                                  child: const Text("model",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold))),
+                              Container(
+                                  height: 25,
+                                  alignment: Alignment.center,
+                                  child:
+                                      Text("${widget.metaDataInfo.osModel}")),
+                            ]),
+                            if (widget.metaDataInfo.os == "android")
+                              TableRow(children: [
+                                Container(
+                                    height: 25,
+                                    alignment: Alignment.center,
+                                    child: const Text("sdk version",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold))),
+                                Container(
+                                    height: 25,
+                                    alignment: Alignment.center,
+                                    child:
+                                        Text("sdk ${widget.metaDataInfo.sdk}")),
+                              ]),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 75,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(space, 0, space, space),
+                        child: TextField(
+                          decoration: const InputDecoration(
+                            hintText: '제목',
+                            hintStyle: TextStyle(fontSize: 13),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                borderSide:
+                                    BorderSide(width: 1, color: Colors.black)),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                            ),
+                          ),
+                          onChanged: (text) {
+                            setTitle(text);
+                          },
                         ),
                       ),
-                      onChanged: (text) {
-                        setTitle(text);
-                      },
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(space, 0, space, space),
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        hintText: '작성자',
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            borderSide:
-                                BorderSide(width: 1, color: Colors.black)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    SizedBox(
+                      height: 75,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(space, 0, space, space),
+                        child: TextField(
+                          decoration: const InputDecoration(
+                            hintText: '작성자',
+                            hintStyle: TextStyle(fontSize: 13),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                                borderSide:
+                                    BorderSide(width: 1, color: Colors.black)),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                            ),
+                          ),
+                          onChanged: (text) {
+                            setAuthor(text);
+                          },
                         ),
                       ),
-                      onChanged: (text) {
-                        setAuthor(text);
-                      },
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(space, 0, space, space),
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        hintText: '내용',
-                        focusedBorder: OutlineInputBorder(
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(space, 0, space, space),
+                      child: TextField(
+                        maxLines: 3,
+                        decoration: const InputDecoration(
+                          hintText: '내용',
+                          hintStyle: TextStyle(fontSize: 13),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.black)),
+                          border: OutlineInputBorder(
                             borderRadius:
                                 BorderRadius.all(Radius.circular(10.0)),
-                            borderSide:
-                                BorderSide(width: 1, color: Colors.black)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          ),
                         ),
+                        onChanged: (text) {
+                          setContent(text);
+                        },
                       ),
-                      onChanged: (text) {
-                        setContent(text);
-                      },
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: screenHeight * 0.02),
-                    child: ElevatedButton(
-                      onPressed: saveItems,
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.black,
-                        minimumSize: const Size(80, 50),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: screenHeight * 0.02,
+                          bottom: screenHeight * 0.02),
+                      child: ElevatedButton(
+                        onPressed: saveItems,
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.black,
+                          minimumSize: const Size(70, 50),
+                        ),
+                        child: const Text("저장"),
                       ),
-                      child: const Text('저장'),
                     ),
-                  ),
-                ]),
+                  ]),
+            ),
           ),
         ),
         floatingActionButton: const BackFAB());

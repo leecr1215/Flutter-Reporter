@@ -100,7 +100,7 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
 
   @override
   GridView showScreenShotList() {
-    // TODO: 스크린샷 리스트 조회 child
+    // 스크린샷 리스트 조회 child
     final List<File> imagePaths = widget.screenShotImage.getImagePaths();
     return GridView.builder(
       itemCount: imagePaths.length,

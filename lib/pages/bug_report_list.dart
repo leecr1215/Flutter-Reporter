@@ -24,7 +24,6 @@ class _BugReportListState extends State<BugReportList> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
     BugReport bugReport = widget.bugReport;
     return FutureBuilder<Map<String, dynamic>>(
       future: bugReport.getReportList(),
