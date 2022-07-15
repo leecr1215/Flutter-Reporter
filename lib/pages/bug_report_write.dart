@@ -1,5 +1,3 @@
-import 'dart:ffi' as ffi;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_reporter/components/back_fab.dart';
 import 'dart:io';
@@ -36,10 +34,12 @@ class _BugReportWriteState extends State<BugReportWrite>
   String currentTime = "";
   List<File> imageFile = [];
   late AppMetaData appMetaData;
+  late FlutterMode mode;
 
   @override
   void initState() {
     appMetaData = AppMetaData();
+    mode = FlutterMode();
     super.initState();
   }
 
@@ -180,6 +180,76 @@ class _BugReportWriteState extends State<BugReportWrite>
     );
   }
 
+  Table appDataTable() {
+    return Table(
+      border: TableBorder.all(),
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      columnWidths: const {
+        0: FlexColumnWidth(2),
+        1: FlexColumnWidth(3),
+      },
+      children: <TableRow>[
+        TableRow(children: [
+          Container(
+              height: 25,
+              //color: Colors.grey.shade400,
+              alignment: Alignment.center,
+              child: const Text("app name",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          Container(
+            height: 25,
+            alignment: Alignment.center,
+            child: Text("${appMetaData.appName}"),
+          ),
+        ]),
+        TableRow(children: [
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: const Text("package name",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: Text("${appMetaData.packageName}")),
+        ]),
+        TableRow(children: [
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: const Text("package version",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: Text("${appMetaData.version}")),
+        ]),
+        TableRow(children: [
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: const Text("build number",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: Text("${appMetaData.buildNumber}")),
+        ]),
+        TableRow(children: [
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: const Text("build mode",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: Text("${mode.mode}")),
+        ]),
+      ],
+    );
+  }
+
   Table deviceDataTable() {
     return Table(
       border: TableBorder.all(),
@@ -226,66 +296,6 @@ class _BugReportWriteState extends State<BugReportWrite>
                 alignment: Alignment.center,
                 child: Text("sdk ${widget.deviceMetaData.sdk}")),
           ]),
-      ],
-    );
-  }
-
-  Table appDataTable() {
-    return Table(
-      border: TableBorder.all(),
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      columnWidths: const {
-        0: FlexColumnWidth(2),
-        1: FlexColumnWidth(3),
-      },
-      children: <TableRow>[
-        TableRow(children: [
-          Container(
-              height: 25,
-              //color: Colors.grey.shade400,
-              alignment: Alignment.center,
-              child: const Text("app name",
-                  style: TextStyle(fontWeight: FontWeight.bold))),
-          Container(
-            height: 25,
-            alignment: Alignment.center,
-            child: Text("${appMetaData.appName}"),
-          ),
-        ]),
-        TableRow(children: [
-          Container(
-              height: 25,
-              alignment: Alignment.center,
-              child: const Text("package name",
-                  style: TextStyle(fontWeight: FontWeight.bold))),
-          Container(
-              height: 25,
-              alignment: Alignment.center,
-              child: Text("${appMetaData.packageName}")),
-        ]),
-        if (widget.deviceMetaData.os == "android")
-          TableRow(children: [
-            Container(
-                height: 25,
-                alignment: Alignment.center,
-                child: const Text("package version",
-                    style: TextStyle(fontWeight: FontWeight.bold))),
-            Container(
-                height: 25,
-                alignment: Alignment.center,
-                child: Text("${appMetaData.version}")),
-          ]),
-        TableRow(children: [
-          Container(
-              height: 25,
-              alignment: Alignment.center,
-              child: const Text("build number",
-                  style: TextStyle(fontWeight: FontWeight.bold))),
-          Container(
-              height: 25,
-              alignment: Alignment.center,
-              child: Text("${appMetaData.buildNumber}")),
-        ]),
       ],
     );
   }

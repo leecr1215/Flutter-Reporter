@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/widgets.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:flutter/foundation.dart';
 
 abstract class MetaDataAbstract {}
 
@@ -48,8 +48,25 @@ class AppMetaData {
     packageName = packageInfo.packageName;
     version = packageInfo.version;
     buildNumber = packageInfo.buildNumber;
-    debugPrint(
-        'appName: ${appName}, packageName: ${packageName}, version: ${version}, buildNumber: ${buildNumber}');
+
     return packageInfo;
+  }
+}
+
+class FlutterMode {
+  String? mode;
+
+  FlutterMode() {
+    mode = getMode();
+  }
+
+  String getMode() {
+    if (kDebugMode) {
+      return "debug";
+    } else if (kReleaseMode) {
+      return "release";
+    } else {
+      return "profile";
+    }
   }
 }
