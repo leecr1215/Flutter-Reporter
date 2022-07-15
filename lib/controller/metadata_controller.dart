@@ -1,15 +1,17 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/widgets.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 abstract class MetaDataAbstract {}
 
-class MetaDataInfo {
+class DeviceMetaData {
   String os = Platform.operatingSystem; // os type. ex) android, ios, mac...
   String? osVersion;
   String? osModel; // ex) Galaxy Note 20
   int? sdk; // only andriod
 
-  MetaDataInfo() {
+  DeviceMetaData() {
     setVersionInfo();
   }
 
@@ -27,5 +29,27 @@ class MetaDataInfo {
       osModel = iosInfo.utsname.machine;
       // return iosInfo.utsname.version.toString();
     }
+  }
+}
+
+class AppMetaData {
+  String? appName;
+  String? packageName;
+  String? version;
+  String? buildNumber;
+
+  AppMetaData() {
+    setVersionInfo();
+  }
+
+  Future setVersionInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    appName = packageInfo.appName;
+    packageName = packageInfo.packageName;
+    version = packageInfo.version;
+    buildNumber = packageInfo.buildNumber;
+    debugPrint(
+        'appName: ${appName}, packageName: ${packageName}, version: ${version}, buildNumber: ${buildNumber}');
+    return packageInfo;
   }
 }

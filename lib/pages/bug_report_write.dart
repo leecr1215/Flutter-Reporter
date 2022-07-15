@@ -1,3 +1,5 @@
+import 'dart:ffi' as ffi;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_reporter/components/back_fab.dart';
 import 'dart:io';
@@ -10,12 +12,12 @@ import '../controller/metadata_controller.dart';
 class BugReportWrite extends StatefulWidget {
   final ScreenShotImage screenShotImage;
   final int index;
-  final MetaDataInfo metaDataInfo;
+  final DeviceMetaData deviceMetaData;
   const BugReportWrite(
       {Key? key,
       required this.screenShotImage,
       required this.index,
-      required this.metaDataInfo})
+      required this.deviceMetaData})
       : super(key: key);
 
   @override
@@ -33,148 +35,66 @@ class _BugReportWriteState extends State<BugReportWrite>
   String author = "";
   String currentTime = "";
   List<File> imageFile = [];
+  late AppMetaData appMetaData;
+
+  @override
+  void initState() {
+    appMetaData = AppMetaData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    bool keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
     imageFile.add(widget.screenShotImage.getImageFile(widget.index));
     double space = screenHeight * 0.03;
     //debugPrint('인덱스 : ${widget.index}');
     return Scaffold(
-        body: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: SingleChildScrollView(
-            child: SafeArea(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.all(space),
-                      child: Image.file(
-                        imageFile[0],
-                        width: screenWidth * 0.6,
-                        height: screenHeight * 0.4,
-                        fit: BoxFit.contain,
-                      ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(space),
+                    child: Image.file(
+                      imageFile[0],
+                      width: screenWidth * 0.6,
+                      height: screenHeight * 0.4,
+                      fit: BoxFit.contain,
                     ),
-                    Padding(
-                        padding: EdgeInsets.fromLTRB(space, 0, space, space),
-                        // child: Column(
-                        //   children: [
-                        //     Text("os : ${widget.metaDataInfo.os}"),
-                        //     Text("version : ${widget.metaDataInfo.osVersion}"),
-                        //     Text("model: ${widget.metaDataInfo.osModel}"),
-                        //     Text("sdk: ${widget.metaDataInfo.sdk}"),
-                        //   ],
-                        // ),
-                        child: Table(
-                          border: TableBorder.all(),
-                          defaultVerticalAlignment:
-                              TableCellVerticalAlignment.middle,
-                          columnWidths: const {
-                            0: FlexColumnWidth(2),
-                            1: FlexColumnWidth(3),
-                          },
-                          children: <TableRow>[
-                            TableRow(children: [
-                              Container(
-                                  height: 25,
-                                  //color: Colors.grey.shade400,
-                                  alignment: Alignment.center,
-                                  child: const Text("os version",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold))),
-                              Container(
-                                height: 25,
-                                alignment: Alignment.center,
-                                child: Text(
-                                    "${widget.metaDataInfo.os} ${widget.metaDataInfo.osVersion}"),
-                              ),
-                            ]),
-                            TableRow(children: [
-                              Container(
-                                  height: 25,
-                                  alignment: Alignment.center,
-                                  child: const Text("model",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold))),
-                              Container(
-                                  height: 25,
-                                  alignment: Alignment.center,
-                                  child:
-                                      Text("${widget.metaDataInfo.osModel}")),
-                            ]),
-                            if (widget.metaDataInfo.os == "android")
-                              TableRow(children: [
-                                Container(
-                                    height: 25,
-                                    alignment: Alignment.center,
-                                    child: const Text("sdk version",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold))),
-                                Container(
-                                    height: 25,
-                                    alignment: Alignment.center,
-                                    child:
-                                        Text("sdk ${widget.metaDataInfo.sdk}")),
-                              ]),
-                          ],
-                        )),
-                    SizedBox(
-                      height: 75,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(space, 0, space, space),
-                        child: TextField(
-                          decoration: const InputDecoration(
-                            hintText: '제목',
-                            hintStyle: TextStyle(fontSize: 13),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide:
-                                    BorderSide(width: 1, color: Colors.black)),
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                            ),
-                          ),
-                          onChanged: (text) {
-                            setTitle(text);
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 75,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(space, 0, space, space),
-                        child: TextField(
-                          decoration: const InputDecoration(
-                            hintText: '작성자',
-                            hintStyle: TextStyle(fontSize: 13),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                                borderSide:
-                                    BorderSide(width: 1, color: Colors.black)),
-                            border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                            ),
-                          ),
-                          onChanged: (text) {
-                            setAuthor(text);
-                          },
-                        ),
-                      ),
-                    ),
-                    Padding(
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(space, 0, space, space),
+                    child: FutureBuilder<dynamic>(
+                        future: appMetaData.setVersionInfo(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return appDataTable();
+                          } else {
+                            return const Text("값을 불러올 수 없습니다.");
+                          }
+                        }),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.fromLTRB(space, 0, space, space),
+                      child: deviceDataTable()),
+                  Container(
+                      padding: EdgeInsets.only(bottom: space),
+                      width: 500,
+                      child:
+                          Divider(color: Colors.grey.shade400, thickness: 1.0)),
+                  SizedBox(
+                    height: 75,
+                    child: Padding(
                       padding: EdgeInsets.fromLTRB(space, 0, space, space),
                       child: TextField(
-                        maxLines: 3,
                         decoration: const InputDecoration(
-                          hintText: '내용',
+                          hintText: '제목',
                           hintStyle: TextStyle(fontSize: 13),
                           focusedBorder: OutlineInputBorder(
                               borderRadius:
@@ -187,28 +107,187 @@ class _BugReportWriteState extends State<BugReportWrite>
                           ),
                         ),
                         onChanged: (text) {
-                          setContent(text);
+                          setTitle(text);
                         },
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: screenHeight * 0.02,
-                          bottom: screenHeight * 0.02),
-                      child: ElevatedButton(
-                        onPressed: saveItems,
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.black,
-                          minimumSize: const Size(70, 50),
+                  ),
+                  SizedBox(
+                    height: 75,
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(space, 0, space, space),
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          hintText: '작성자',
+                          hintStyle: TextStyle(fontSize: 13),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.black)),
+                          border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                          ),
                         ),
-                        child: const Text("저장"),
+                        onChanged: (text) {
+                          setAuthor(text);
+                        },
                       ),
                     ),
-                  ]),
-            ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(space, 0, space, space),
+                    child: TextField(
+                      maxLines: 3,
+                      decoration: const InputDecoration(
+                        hintText: '내용',
+                        hintStyle: TextStyle(fontSize: 13),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            borderSide:
+                                BorderSide(width: 1, color: Colors.black)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                      ),
+                      onChanged: (text) {
+                        setContent(text);
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: screenHeight * 0.02, bottom: screenHeight * 0.02),
+                    child: ElevatedButton(
+                      onPressed: saveItems,
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black,
+                        minimumSize: const Size(70, 50),
+                      ),
+                      child: const Text("저장"),
+                    ),
+                  ),
+                ]),
           ),
         ),
-        floatingActionButton: const BackFAB());
+      ),
+      floatingActionButton: Visibility(
+        visible: !keyboardIsOpened,
+        child: const BackFAB(),
+      ),
+    );
+  }
+
+  Table deviceDataTable() {
+    return Table(
+      border: TableBorder.all(),
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      columnWidths: const {
+        0: FlexColumnWidth(2),
+        1: FlexColumnWidth(3),
+      },
+      children: <TableRow>[
+        TableRow(children: [
+          Container(
+              height: 25,
+              //color: Colors.grey.shade400,
+              alignment: Alignment.center,
+              child: const Text("os version",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          Container(
+            height: 25,
+            alignment: Alignment.center,
+            child: Text(
+                "${widget.deviceMetaData.os} ${widget.deviceMetaData.osVersion}"),
+          ),
+        ]),
+        TableRow(children: [
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: const Text("model",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: Text("${widget.deviceMetaData.osModel}")),
+        ]),
+        if (widget.deviceMetaData.os == "android")
+          TableRow(children: [
+            Container(
+                height: 25,
+                alignment: Alignment.center,
+                child: const Text("sdk version",
+                    style: TextStyle(fontWeight: FontWeight.bold))),
+            Container(
+                height: 25,
+                alignment: Alignment.center,
+                child: Text("sdk ${widget.deviceMetaData.sdk}")),
+          ]),
+      ],
+    );
+  }
+
+  Table appDataTable() {
+    return Table(
+      border: TableBorder.all(),
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      columnWidths: const {
+        0: FlexColumnWidth(2),
+        1: FlexColumnWidth(3),
+      },
+      children: <TableRow>[
+        TableRow(children: [
+          Container(
+              height: 25,
+              //color: Colors.grey.shade400,
+              alignment: Alignment.center,
+              child: const Text("app name",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          Container(
+            height: 25,
+            alignment: Alignment.center,
+            child: Text("${appMetaData.appName}"),
+          ),
+        ]),
+        TableRow(children: [
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: const Text("package name",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: Text("${appMetaData.packageName}")),
+        ]),
+        if (widget.deviceMetaData.os == "android")
+          TableRow(children: [
+            Container(
+                height: 25,
+                alignment: Alignment.center,
+                child: const Text("package version",
+                    style: TextStyle(fontWeight: FontWeight.bold))),
+            Container(
+                height: 25,
+                alignment: Alignment.center,
+                child: Text("${appMetaData.version}")),
+          ]),
+        TableRow(children: [
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: const Text("build number",
+                  style: TextStyle(fontWeight: FontWeight.bold))),
+          Container(
+              height: 25,
+              alignment: Alignment.center,
+              child: Text("${appMetaData.buildNumber}")),
+        ]),
+      ],
+    );
   }
 
   void setTitle(text) {

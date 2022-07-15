@@ -30,15 +30,16 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
   Map<String, dynamic> map = {};
 
   late BugReport bugReport;
-  late MetaDataInfo metaDataInfo;
+  late DeviceMetaData deviceMetaData;
+  late AppMetaData appMetaData;
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     waitStorageReady();
     bugReport = BugReport();
-    metaDataInfo = MetaDataInfo();
-
+    deviceMetaData = DeviceMetaData();
+    appMetaData = AppMetaData();
     super.initState();
   }
 
@@ -119,7 +120,7 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
                     builder: (context) => BugReportWrite(
                           screenShotImage: widget.screenShotImage,
                           index: index,
-                          metaDataInfo: metaDataInfo,
+                          deviceMetaData: deviceMetaData,
                         )),
               );
             },
