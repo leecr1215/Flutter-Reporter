@@ -27,6 +27,9 @@ class _BugReportWriteState extends State<BugReportWrite>
     implements BugReportController {
   final BugReportList list = BugReportList();
   final LocalStorage storage = LocalStorage('bug_report.json');
+  final titleController = TextEditingController();
+  final contentController = TextEditingController();
+  final authorController = TextEditingController();
 
   String title = "";
   String content = "";
@@ -41,6 +44,14 @@ class _BugReportWriteState extends State<BugReportWrite>
     appMetaData = AppMetaData();
     mode = FlutterMode();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    contentController.dispose();
+    authorController.dispose();
+    super.dispose();
   }
 
   @override
@@ -95,6 +106,7 @@ class _BugReportWriteState extends State<BugReportWrite>
                       child: TextField(
                         decoration: const InputDecoration(
                           hintText: '제목',
+                          labelStyle: TextStyle(fontSize: 13),
                           hintStyle: TextStyle(fontSize: 13),
                           focusedBorder: OutlineInputBorder(
                               borderRadius:
@@ -106,9 +118,7 @@ class _BugReportWriteState extends State<BugReportWrite>
                                 BorderRadius.all(Radius.circular(10.0)),
                           ),
                         ),
-                        onChanged: (text) {
-                          setTitle(text);
-                        },
+                        controller: titleController,
                       ),
                     ),
                   ),
@@ -130,9 +140,7 @@ class _BugReportWriteState extends State<BugReportWrite>
                                 BorderRadius.all(Radius.circular(10.0)),
                           ),
                         ),
-                        onChanged: (text) {
-                          setAuthor(text);
-                        },
+                        controller: authorController,
                       ),
                     ),
                   ),
@@ -152,9 +160,7 @@ class _BugReportWriteState extends State<BugReportWrite>
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                       ),
-                      onChanged: (text) {
-                        setContent(text);
-                      },
+                      controller: contentController,
                     ),
                   ),
                   Padding(
@@ -300,21 +306,21 @@ class _BugReportWriteState extends State<BugReportWrite>
     );
   }
 
-  void setTitle(text) {
+  void setTitle() {
     setState(() {
-      title = text;
+      title = titleController.text;
     });
   }
 
-  void setContent(text) {
+  void setContent() {
     setState(() {
-      content = text;
+      content = contentController.text;
     });
   }
 
-  void setAuthor(text) {
+  void setAuthor() {
     setState(() {
-      author = text;
+      author = authorController.text;
     });
   }
 
@@ -358,13 +364,17 @@ class _BugReportWriteState extends State<BugReportWrite>
 
   @override
   void saveItems() {
+    setTitle();
+    setContent();
+    setAuthor();
+    setTime();
     // 빈칸 없는지 확인
     if (title == "" || author == "" || content == "") {
       alertDialog();
     } else {
       // 시간되면 저장된 리포트인지 아닌지 판단
       // 저장
-      setTime();
+
       addItem();
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("리포트가 저장되었습니다. ")));
