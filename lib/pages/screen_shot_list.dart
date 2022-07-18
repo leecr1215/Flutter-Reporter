@@ -56,35 +56,37 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
 
     debugPrint(bugReport.keys.toString());
     return Scaffold(
-        body: Container(
-          padding: const EdgeInsets.all(15.0),
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              TabBar(
-                unselectedLabelColor: Colors.black,
-                labelColor: Colors.white,
-                tabs: _tabs,
-                controller: _tabController,
-                indicatorPadding: const EdgeInsets.all(5.0),
-                indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: _selectedColor),
-              ),
-              Expanded(
-                child: TabBarView(
+        body: SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(15.0),
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                TabBar(
+                  unselectedLabelColor: Colors.black,
+                  labelColor: Colors.white,
+                  tabs: _tabs,
                   controller: _tabController,
-                  children: [
-                    showScreenShotList(),
-                    BugReportList(bugReport: bugReport)
-                  ],
+                  indicatorPadding: const EdgeInsets.all(5.0),
+                  indicator: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: _selectedColor),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      showScreenShotList(),
+                      BugReportList(bugReport: bugReport)
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         floatingActionButton: const Align(
