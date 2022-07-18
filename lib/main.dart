@@ -67,6 +67,7 @@ class MyHomePage extends State<MainPage> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+
       body: SafeArea(
         child: Stack(
           children: [
@@ -87,6 +88,7 @@ class MyHomePage extends State<MainPage> {
             )
           ],
         ),
+
       ),
     );
   }
