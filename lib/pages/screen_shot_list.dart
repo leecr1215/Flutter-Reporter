@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reporter/components/back_fab.dart';
+import 'package:flutter_reporter/pages/report_list_page.dart';
+import 'package:flutter_reporter/views/report_list_view.dart';
 import '../controller/screen_shot_list_loader.dart';
 import 'dart:io';
 import '../controller/screen_shot_controller.dart';
 import 'bug_report_write.dart';
 import 'package:localstorage/localstorage.dart';
-import '../controller/bug_report_list_loader.dart';
 import 'bug_report_list.dart';
 import '../controller/metadata_controller.dart';
 
@@ -29,7 +30,6 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
 
   Map<String, dynamic> map = {};
 
-  late BugReport bugReport;
   late DeviceMetaData deviceMetaData;
   late AppMetaData appMetaData;
 
@@ -37,7 +37,6 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     waitStorageReady();
-    bugReport = BugReport();
     deviceMetaData = DeviceMetaData();
     appMetaData = AppMetaData();
     super.initState();
@@ -56,9 +55,6 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
 
   @override
   Widget build(BuildContext context) {
-    BugReport bugReport = BugReport();
-
-    debugPrint(bugReport.keys.toString());
     return Scaffold(
         body: SafeArea(
           child: Container(
@@ -83,10 +79,7 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
-                    children: [
-                      showScreenShotList(),
-                      BugReportList(bugReport: bugReport)
-                    ],
+                    children: [showScreenShotList(), BugReportListPage()],
                   ),
                 ),
               ],

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reporter/view_models/screen_shot_view_model.dart';
+import 'package:provider/provider.dart';
 
 class TestApp extends StatelessWidget {
-  const TestApp({
+  TestApp({
     Key? key,
   }) : super(key: key);
 
+  //late ScreenShotViewModel viewModel;
+
   @override
   Widget build(BuildContext context) {
+    //viewModel = Provider.of<ScreenShotViewModel>(context);
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Container(

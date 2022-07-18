@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reporter/controller/screen_shot_controller.dart';
+import 'package:flutter_reporter/view_models/screen_shot_view_model.dart';
+//import 'package:flutter_reporter/models/screen_shot_model.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import '../controller/screen_shot_controller.dart';
+import 'package:provider/provider.dart';
 import '../pages/screen_shot_list.dart';
 
 class FAB extends StatelessWidget {
   final ScreenShotImage screenShotImage;
-  const FAB({Key? key, required this.screenShotImage}) : super(key: key);
+  FAB({Key? key, required this.screenShotImage}) : super(key: key);
+  late ScreenShotViewModel screenViewModel;
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-
+    screenViewModel = Provider.of<ScreenShotViewModel>(context);
     return SpeedDial(
       elevation: 0,
       backgroundColor: Colors.black,

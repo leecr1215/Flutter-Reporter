@@ -3,12 +3,11 @@ import 'dart:io';
 import '../controller/bug_report_list_loader.dart';
 
 class BugReportList extends StatefulWidget {
-  const BugReportList({
+  BugReportList({
     Key? key,
-    required this.bugReport,
   }) : super(key: key);
 
-  final BugReport bugReport;
+  final BugReport bugReport = BugReport();
 
   @override
   State<BugReportList> createState() => _BugReportListState();

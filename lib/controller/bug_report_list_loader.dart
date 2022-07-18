@@ -15,7 +15,6 @@ class BugReport implements BugReportListLoader {
   @override
   Future<Map<String, dynamic>> getReportList() async {
     // 저장된 버그 리포트 불러오기
-    // json 파일이 없는 경우에는 어떻게 할지 생각해야함
     await Future.delayed(const Duration(milliseconds: 10), () async {
       final directory = (await getApplicationDocumentsDirectory()).path;
       File jsonFile = File('$directory/bug_report.json');
@@ -45,6 +44,14 @@ class BugReport implements BugReportListLoader {
 
   String getImage(key) {
     return map[key][0]['image'];
+  }
+
+  String getAuthor(key) {
+    return map[key][0]['author'];
+  }
+
+  String getContent(key) {
+    return map[key][0]['content'];
   }
 
   String getCurrentTime(key) {
