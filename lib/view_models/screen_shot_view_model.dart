@@ -10,33 +10,46 @@ import 'dart:typed_data';
 import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
 
+//final ScreenShotImage screenShotImage = ScreenShotImage();
+
 class ScreenShotViewModel with ChangeNotifier {
-  late final ScreenShotImage screenShotImage;
+  static final ScreenShotImage screenShotImage = ScreenShotImage();
+  bool _disposed = false;
 
-  ScreenShotViewModel() {
-    screenShotImage = ScreenShotImage();
-
-    setImagePaths();
-  }
-
-  void setImagePaths() {
+  void getImagePaths() {
+    List<File> imagePaths = [];
     Future<List> files = getLocalImagePaths();
     files.then((file) => {
-          file.map((file) => screenShotImage.imagePaths.add(file)).toList(),
+          file.map((file) => imagePaths.add(file)).toList(),
+          screenShotImage.imagePaths = imagePaths,
         });
-    print('가져온 imagePaths: ${screenShotImage.imagePaths}');
-    notifyListeners();
+    //notifyListeners();
   }
 
-  List<File> getImagePaths() {
-    return screenShotImage.imagePaths;
+  ScreenShotImage get getScreenShotImage => screenShotImage;
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
+  @override
+  notifyListeners() {
+    if (!_disposed) {
+      super.notifyListeners();
+    }
   }
 
   File getImageFile(int index) {
     return screenShotImage.imagePaths[index];
   }
 
-  void takeScreenShot() {
+  void setImagePaths(List<File> newImagePaths) {
+    screenShotImage.imagePaths = newImagePaths;
+  }
+
+  void takeScreenShot() async {
     Future.delayed(const Duration(milliseconds: 10), () async {
       if (screenShotImage.globalKey.currentContext != null) {
         RenderRepaintBoundary? boundary =
@@ -50,6 +63,7 @@ class ScreenShotViewModel with ChangeNotifier {
             await image.toByteData(format: ui.ImageByteFormat.png);
         Uint8List pngBytes = byteData!.buffer.asUint8List();
         DateTime now = DateTime.now();
+
         String currentTime = DateFormat('yyyy-MM-dd_HH-mm-ss').format(now);
         File imgFile =
             File('$directory/reporter/${currentTime}_screenshot.png');

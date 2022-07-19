@@ -1,9 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_reporter/models/metadata_device_model.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
-class DeviceMetaDataViewModel {
+class DeviceMetaDataViewModel with ChangeNotifier {
   DeviceMetaData deviceMetaData = DeviceMetaData();
-
+  bool _isLoading = false;
   DeviceMetaDataViewModel() {
     setVersionInfo();
   }
@@ -21,8 +22,11 @@ class DeviceMetaDataViewModel {
       deviceMetaData.osVersion = iosInfo.systemVersion;
       deviceMetaData.osModel = iosInfo.utsname.machine;
     }
-    //notifyListeners();
+    _isLoading = true;
+    notifyListeners();
   }
+
+  bool get isLoading => _isLoading;
 
   String get os {
     return deviceMetaData.os;

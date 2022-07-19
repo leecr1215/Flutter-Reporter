@@ -8,6 +8,7 @@ class BugReportListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<BugReportListViewModel>(
-        create: (_) => BugReportListViewModel(), child: BugReportListView());
+        create: (_) => BugReportListViewModel(),
+        child: const BugReportListView());
   }
 }

@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reporter/components/back_fab.dart';
-import 'package:flutter_reporter/models/screen_shot_model.dart';
+import 'package:flutter_reporter/view_models/metadata_app_view_model.dart';
+import 'package:flutter_reporter/view_models/metadata_device_view_model.dart';
+import 'package:flutter_reporter/view_models/metadata_view_model.dart';
+import 'package:flutter_reporter/view_models/screen_shot_view_model.dart';
 import 'dart:io';
-//import '../controller/screen_shot_controller.dart';
 import 'package:intl/intl.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:provider/provider.dart';
 import '../controller/bug_report_controller.dart';
-import '../controller/metadata_controller.dart';
 
-class BugReportWrite extends StatefulWidget {
-  final ScreenShotImage screenShotImage;
+class BugReportWriteView extends StatefulWidget {
   final int index;
-  final DeviceMetaData deviceMetaData;
-  const BugReportWrite(
-      {Key? key,
-      required this.screenShotImage,
-      required this.index,
-      required this.deviceMetaData})
-      : super(key: key);
+  const BugReportWriteView({
+    Key? key,
+    required this.index,
+  }) : super(key: key);
 
   @override
-  State<BugReportWrite> createState() => _BugReportWriteState();
+  State<BugReportWriteView> createState() => _BugReportWriteViewState();
 }
 
-class _BugReportWriteState extends State<BugReportWrite>
+class _BugReportWriteViewState extends State<BugReportWriteView>
     with SingleTickerProviderStateMixin
     implements BugReportController {
   final BugReportList list = BugReportList();
@@ -37,14 +35,19 @@ class _BugReportWriteState extends State<BugReportWrite>
   String author = "";
   String currentTime = "";
   List<File> imageFile = [];
-  late AppMetaData appMetaData;
-  late FlutterMode mode;
+  late MetaDataViewModel metaDataViewModel;
+  late ScreenShotViewModel screenShotViewModel;
+  late AppMetaDataViewModel appModel;
+  late DeviceMetaDataViewModel deviceModel;
 
   @override
   void initState() {
-    appMetaData = AppMetaData();
-    mode = FlutterMode();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
   }
 
   @override
@@ -60,9 +63,14 @@ class _BugReportWriteState extends State<BugReportWrite>
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     bool keyboardIsOpened = MediaQuery.of(context).viewInsets.bottom != 0.0;
-    //imageFile.add(widget.screenShotImage.getImageFile(widget.index));
+
+    metaDataViewModel = Provider.of<MetaDataViewModel>(context);
+    screenShotViewModel = Provider.of<ScreenShotViewModel>(context);
+    appModel = Provider.of<AppMetaDataViewModel>(context);
+    deviceModel = Provider.of<DeviceMetaDataViewModel>(context);
+
     double space = screenHeight * 0.03;
-    //debugPrint('인덱스 : ${widget.index}');
+
     return Scaffold(
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -74,27 +82,20 @@ class _BugReportWriteState extends State<BugReportWrite>
                   Padding(
                     padding: EdgeInsets.all(space),
                     child: Image.file(
-                      imageFile[0],
+                      screenShotViewModel.getScreenShotImage.imagePaths[0],
                       width: screenWidth * 0.6,
                       height: screenHeight * 0.4,
                       fit: BoxFit.contain,
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.fromLTRB(space, 0, space, space),
-                    child: FutureBuilder<dynamic>(
-                        future: appMetaData.setVersionInfo(),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return appDataTable();
-                          } else {
-                            return const Text("값을 불러올 수 없습니다.");
-                          }
-                        }),
-                  ),
+                      padding: EdgeInsets.fromLTRB(space, 0, space, space),
+                      child: appModel.isLoading ? appDataTable() : Container()),
                   Padding(
                       padding: EdgeInsets.fromLTRB(space, 0, space, space),
-                      child: deviceDataTable()),
+                      child: deviceModel.isLoading
+                          ? deviceDataTable()
+                          : Container()),
                   Container(
                       padding: EdgeInsets.only(bottom: space),
                       width: 500,
@@ -199,14 +200,13 @@ class _BugReportWriteState extends State<BugReportWrite>
         TableRow(children: [
           Container(
               height: 25,
-              //color: Colors.grey.shade400,
               alignment: Alignment.center,
               child: const Text("app name",
                   style: TextStyle(fontWeight: FontWeight.bold))),
           Container(
             height: 25,
             alignment: Alignment.center,
-            child: Text("${appMetaData.appName}"),
+            child: Text(appModel.appMetaData.getAppName!),
           ),
         ]),
         TableRow(children: [
@@ -218,7 +218,7 @@ class _BugReportWriteState extends State<BugReportWrite>
           Container(
               height: 25,
               alignment: Alignment.center,
-              child: Text("${appMetaData.packageName}")),
+              child: Text(appModel.appMetaData.getPackageName!)),
         ]),
         TableRow(children: [
           Container(
@@ -229,7 +229,7 @@ class _BugReportWriteState extends State<BugReportWrite>
           Container(
               height: 25,
               alignment: Alignment.center,
-              child: Text("${appMetaData.version}")),
+              child: Text(appModel.appMetaData.getVersion!)),
         ]),
         TableRow(children: [
           Container(
@@ -240,7 +240,7 @@ class _BugReportWriteState extends State<BugReportWrite>
           Container(
               height: 25,
               alignment: Alignment.center,
-              child: Text("${appMetaData.buildNumber}")),
+              child: Text(appModel.appMetaData.getBuildNumber!)),
         ]),
         TableRow(children: [
           Container(
@@ -251,7 +251,7 @@ class _BugReportWriteState extends State<BugReportWrite>
           Container(
               height: 25,
               alignment: Alignment.center,
-              child: Text("${mode.mode}")),
+              child: Text(metaDataViewModel.flutterModeViewModel.mode)),
         ]),
       ],
     );
@@ -269,7 +269,6 @@ class _BugReportWriteState extends State<BugReportWrite>
         TableRow(children: [
           Container(
               height: 25,
-              //color: Colors.grey.shade400,
               alignment: Alignment.center,
               child: const Text("os version",
                   style: TextStyle(fontWeight: FontWeight.bold))),
@@ -277,7 +276,7 @@ class _BugReportWriteState extends State<BugReportWrite>
             height: 25,
             alignment: Alignment.center,
             child: Text(
-                "${widget.deviceMetaData.os} ${widget.deviceMetaData.osVersion}"),
+                "${deviceModel.deviceMetaData.os} ${deviceModel.deviceMetaData.osVersion}"),
           ),
         ]),
         TableRow(children: [
@@ -289,9 +288,9 @@ class _BugReportWriteState extends State<BugReportWrite>
           Container(
               height: 25,
               alignment: Alignment.center,
-              child: Text("${widget.deviceMetaData.osModel}")),
+              child: Text(deviceModel.osModel)),
         ]),
-        if (widget.deviceMetaData.os == "android")
+        if (deviceModel.os == "android")
           TableRow(children: [
             Container(
                 height: 25,
@@ -301,7 +300,7 @@ class _BugReportWriteState extends State<BugReportWrite>
             Container(
                 height: 25,
                 alignment: Alignment.center,
-                child: Text("sdk ${widget.deviceMetaData.sdk}")),
+                child: Text("sdk ${deviceModel.sdk}")),
           ]),
       ],
     );

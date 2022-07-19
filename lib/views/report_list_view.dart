@@ -4,16 +4,16 @@ import 'package:provider/provider.dart';
 import 'dart:io';
 
 class BugReportListView extends StatelessWidget {
-  BugReportListView({
+  const BugReportListView({
     Key? key,
   }) : super(key: key);
 
-  late BugReportListViewModel viewModel;
+  //late BugReportListViewModel viewModel;
   //final BugReport bugReport = BugReport();
 
   @override
   Widget build(BuildContext context) {
-    viewModel = Provider.of<BugReportListViewModel>(
+    BugReportListViewModel viewModel = Provider.of<BugReportListViewModel>(
         context); // Provider로 viewModel 가져오기
     List keys = viewModel.keys;
     final itemCount = keys.length;
