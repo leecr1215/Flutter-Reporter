@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reporter/components/back_fab.dart';
+import 'package:flutter_reporter/models/report_item_model.dart';
+import 'package:flutter_reporter/models/report_list_model.dart';
 import 'package:flutter_reporter/view_models/metadata_app_view_model.dart';
 import 'package:flutter_reporter/view_models/metadata_device_view_model.dart';
 import 'package:flutter_reporter/view_models/metadata_view_model.dart';
+import 'package:flutter_reporter/view_models/report_write_view_model.dart';
 import 'package:flutter_reporter/view_models/screen_shot_view_model.dart';
-import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
-import '../controller/bug_report_controller.dart';
 
 class BugReportWriteView extends StatefulWidget {
   final int index;
@@ -22,39 +23,26 @@ class BugReportWriteView extends StatefulWidget {
 }
 
 class _BugReportWriteViewState extends State<BugReportWriteView>
-    with SingleTickerProviderStateMixin
-    implements BugReportController {
-  final BugReportList list = BugReportList();
-  final LocalStorage storage = LocalStorage('bug_report.json');
-  final titleController = TextEditingController();
-  final contentController = TextEditingController();
-  final authorController = TextEditingController();
+    with SingleTickerProviderStateMixin {
+  // final BugReportList list = BugReportList();
+  // final LocalStorage storage = LocalStorage('bug_report.json');
+  // final titleController = TextEditingController();
+  // final contentController = TextEditingController();
+  // final authorController = TextEditingController();
 
-  String title = "";
-  String content = "";
-  String author = "";
-  String currentTime = "";
-  List<File> imageFile = [];
+  // String title = "";
+  // String content = "";
+  // String author = "";
+  // String currentTime = "";
+
   late MetaDataViewModel metaDataViewModel;
   late ScreenShotViewModel screenShotViewModel;
   late AppMetaDataViewModel appModel;
   late DeviceMetaDataViewModel deviceModel;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
+  late BugReportWriteViewModel reportWriteModel;
 
   @override
   void dispose() {
-    titleController.dispose();
-    contentController.dispose();
-    authorController.dispose();
     super.dispose();
   }
 
@@ -68,6 +56,8 @@ class _BugReportWriteViewState extends State<BugReportWriteView>
     screenShotViewModel = Provider.of<ScreenShotViewModel>(context);
     appModel = Provider.of<AppMetaDataViewModel>(context);
     deviceModel = Provider.of<DeviceMetaDataViewModel>(context);
+    reportWriteModel = Provider.of<BugReportWriteViewModel>(context);
+    reportWriteModel.index = widget.index;
 
     double space = screenHeight * 0.03;
 
@@ -120,7 +110,7 @@ class _BugReportWriteViewState extends State<BugReportWriteView>
                                 BorderRadius.all(Radius.circular(10.0)),
                           ),
                         ),
-                        controller: titleController,
+                        controller: reportWriteModel.getTitleController,
                       ),
                     ),
                   ),
@@ -142,7 +132,7 @@ class _BugReportWriteViewState extends State<BugReportWriteView>
                                 BorderRadius.all(Radius.circular(10.0)),
                           ),
                         ),
-                        controller: authorController,
+                        controller: reportWriteModel.getAuthorController,
                       ),
                     ),
                   ),
@@ -162,7 +152,7 @@ class _BugReportWriteViewState extends State<BugReportWriteView>
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                       ),
-                      controller: contentController,
+                      controller: reportWriteModel.getContentController,
                     ),
                   ),
                   Padding(
@@ -188,6 +178,7 @@ class _BugReportWriteViewState extends State<BugReportWriteView>
     );
   }
 
+  /* app 관련 meataData Table */
   Table appDataTable() {
     return Table(
       border: TableBorder.all(),
@@ -257,6 +248,7 @@ class _BugReportWriteViewState extends State<BugReportWriteView>
     );
   }
 
+  /* device 관련 meataData Table */
   Table deviceDataTable() {
     return Table(
       border: TableBorder.all(),
@@ -288,9 +280,9 @@ class _BugReportWriteViewState extends State<BugReportWriteView>
           Container(
               height: 25,
               alignment: Alignment.center,
-              child: Text(deviceModel.osModel)),
+              child: Text(deviceModel.deviceMetaData.osModel!)),
         ]),
-        if (deviceModel.os == "android")
+        if (deviceModel.deviceMetaData.os == "android")
           TableRow(children: [
             Container(
                 height: 25,
@@ -300,82 +292,24 @@ class _BugReportWriteViewState extends State<BugReportWriteView>
             Container(
                 height: 25,
                 alignment: Alignment.center,
-                child: Text("sdk ${deviceModel.sdk}")),
+                child: Text("sdk ${deviceModel.deviceMetaData.sdk}")),
           ]),
       ],
     );
   }
 
-  void setTitle() {
-    setState(() {
-      title = titleController.text;
-    });
-  }
-
-  void setContent() {
-    setState(() {
-      content = contentController.text;
-    });
-  }
-
-  void setAuthor() {
-    setState(() {
-      author = authorController.text;
-    });
-  }
-
-  void setTime() {
-    setState(() {
-      DateTime now = DateTime.now();
-      currentTime = DateFormat('yyyy/MM/dd, HH:mm:ss').format(now);
-    });
-  }
-
-  void addItem() {
-    final item = BugReportItem(
-        title: title,
-        author: author,
-        content: content,
-        currentTime: currentTime,
-        image: imageFile[0]
-            .toString()
-            .substring(7, imageFile[0].toString().length - 1));
-    list.items.add(item);
-    saveToStorage();
-
-    // file을 string으로 바꿀 때 사용
-    debugPrint(imageFile[0]
-        .toString()
-        .substring(7, imageFile[0].toString().length - 1));
-  }
-
-  void saveToStorage() {
-    storage.setItem('bugs${widget.index}', list.toJSONEnable());
-  }
-
-  // 추후 삭제 기능 구현 시 필요한 함수
-  void clearStorage() async {
-    await storage.clear();
-
-    setState(() {
-      list.items = storage.getItem('bugs${widget.index}') ?? [];
-    });
-  }
-
-  @override
   void saveItems() {
-    setTitle();
-    setContent();
-    setAuthor();
-    setTime();
+    reportWriteModel.saveItems(screenShotViewModel.getImageFile(0));
     // 빈칸 없는지 확인
-    if (title == "" || author == "" || content == "") {
+    if (reportWriteModel.title == "" ||
+        reportWriteModel.author == "" ||
+        reportWriteModel.content == "") {
       alertDialog();
     } else {
       // 시간되면 저장된 리포트인지 아닌지 판단
       // 저장
 
-      addItem();
+      reportWriteModel.addItem();
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("리포트가 저장되었습니다. ")));
       Navigator.pop(context);

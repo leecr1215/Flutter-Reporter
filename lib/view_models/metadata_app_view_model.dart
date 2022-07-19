@@ -13,7 +13,6 @@ class AppMetaDataViewModel with ChangeNotifier {
   Future setVersionInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     appMetaData.appName = packageInfo.appName;
-    // appName = packageInfo.appName;
     appMetaData.packageName = packageInfo.packageName;
     appMetaData.version = packageInfo.version;
     appMetaData.buildNumber = packageInfo.buildNumber;
@@ -22,20 +21,4 @@ class AppMetaDataViewModel with ChangeNotifier {
   }
 
   bool get isLoading => _isLoading;
-
-  // String get appName {
-  //   return AppMetaData().appName;
-  // }
-
-  // String get packageName {
-  //   return appMetaData.packageName;
-  // }
-
-  // String get version {
-  //   return appMetaData.version;
-  // }
-
-  // String get buildNumber {
-  //   return appMetaData.buildNumber;
-  // }
 }

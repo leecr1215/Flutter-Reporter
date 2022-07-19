@@ -27,20 +27,4 @@ class DeviceMetaDataViewModel with ChangeNotifier {
   }
 
   bool get isLoading => _isLoading;
-
-  String get os {
-    return deviceMetaData.os;
-  }
-
-  String get osVersion {
-    return deviceMetaData.osVersion as String;
-  }
-
-  String get osModel {
-    return deviceMetaData.osModel as String;
-  }
-
-  int get sdk {
-    return deviceMetaData.sdk as int;
-  }
 }
