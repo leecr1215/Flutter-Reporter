@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reporter/components/back_fab.dart';
-import '../controller/screen_shot_list_loader.dart';
+import 'package:flutter_reporter/pages/report_list_page.dart';
+import 'package:flutter_reporter/view_models/metadata_app_view_model.dart';
+import 'package:flutter_reporter/view_models/metadata_device_view_model.dart';
+import 'package:flutter_reporter/view_models/metadata_view_model.dart';
+import 'package:flutter_reporter/view_models/screen_shot_view_model.dart';
+import 'package:flutter_reporter/views/report_write_view.dart';
 import 'dart:io';
-import '../controller/screen_shot_controller.dart';
-import 'bug_report_write.dart';
 import 'package:localstorage/localstorage.dart';
-import '../controller/bug_report_list_loader.dart';
-import 'bug_report_list.dart';
-import '../controller/metadata_controller.dart';
+import 'package:provider/provider.dart';
 
-class ScreenShotListPage extends StatefulWidget {
-  final ScreenShotImage screenShotImage;
-  const ScreenShotListPage({Key? key, required this.screenShotImage})
-      : super(key: key);
+class ScreenShotListView extends StatefulWidget {
+  const ScreenShotListView({Key? key}) : super(key: key);
   @override
-  State<ScreenShotListPage> createState() => _ScreenShotListPageState();
+  State<ScreenShotListView> createState() => _ScreenShotListViewState();
 }
 
-class _ScreenShotListPageState extends State<ScreenShotListPage>
-    with SingleTickerProviderStateMixin
-    implements ScreenShotListLoader {
+class _ScreenShotListViewState extends State<ScreenShotListView>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   final _selectedColor = const Color(0xff1a73e8);
@@ -29,17 +27,10 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
 
   Map<String, dynamic> map = {};
 
-  late BugReport bugReport;
-  late DeviceMetaData deviceMetaData;
-  late AppMetaData appMetaData;
-
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     waitStorageReady();
-    bugReport = BugReport();
-    deviceMetaData = DeviceMetaData();
-    appMetaData = AppMetaData();
     super.initState();
   }
 
@@ -56,9 +47,6 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
 
   @override
   Widget build(BuildContext context) {
-    BugReport bugReport = BugReport();
-
-    debugPrint(bugReport.keys.toString());
     return Scaffold(
         body: SafeArea(
           child: Container(
@@ -83,10 +71,7 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
-                    children: [
-                      showScreenShotList(),
-                      BugReportList(bugReport: bugReport)
-                    ],
+                    children: [showScreenShotList(), const BugReportListPage()],
                   ),
                 ),
               ],
@@ -99,10 +84,12 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
         ));
   }
 
-  @override
-  GridView showScreenShotList() {
+  showScreenShotList() {
     // 스크린샷 리스트 조회 child
-    final List<File> imagePaths = widget.screenShotImage.getImagePaths();
+    ScreenShotViewModel screenShotViewModel =
+        Provider.of<ScreenShotViewModel>(context);
+    final List<File> imagePaths =
+        screenShotViewModel.getScreenShotImage.imagePaths;
     return GridView.builder(
       itemCount: imagePaths.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -117,11 +104,21 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => BugReportWrite(
-                          screenShotImage: widget.screenShotImage,
-                          index: index,
-                          deviceMetaData: deviceMetaData,
-                        )),
+                  builder: (context) => MultiProvider(providers: [
+                    ChangeNotifierProvider<MetaDataViewModel>(
+                      create: (context) => MetaDataViewModel(),
+                    ),
+                    ChangeNotifierProvider<ScreenShotViewModel>(
+                      create: (context) => ScreenShotViewModel(),
+                    ),
+                    ChangeNotifierProvider<AppMetaDataViewModel>(
+                      create: (context) => AppMetaDataViewModel(),
+                    ),
+                    ChangeNotifierProvider<DeviceMetaDataViewModel>(
+                      create: (context) => DeviceMetaDataViewModel(),
+                    ),
+                  ], child: BugReportWriteView(index: index)),
+                ),
               );
             },
             child: Image.file(

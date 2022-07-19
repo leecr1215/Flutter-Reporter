@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+//import 'package:flutter_reporter/controller/screen_shot_controller.dart';
+import 'package:flutter_reporter/view_models/screen_shot_view_model.dart';
+
+import 'package:flutter_reporter/views/screen_shot_list_view.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import '../controller/screen_shot_controller.dart';
-import '../pages/screen_shot_list.dart';
+import 'package:provider/provider.dart';
 
 class FAB extends StatelessWidget {
-  final ScreenShotImage screenShotImage;
-  const FAB({Key? key, required this.screenShotImage}) : super(key: key);
+  const FAB({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    ScreenShotViewModel screenViewModel =
+        Provider.of<ScreenShotViewModel>(context);
 
     return SpeedDial(
       elevation: 0,
@@ -32,7 +36,7 @@ class FAB extends StatelessWidget {
             size: screenWidth * 0.13,
           ),
           onTap: () {
-            screenShotImage.takeScreenShot();
+            screenViewModel.takeScreenShot();
             ScaffoldMessenger.of(context)
                 .showSnackBar(const SnackBar(content: Text("스크린샷이 저장되었습니다.")));
           },
@@ -48,8 +52,11 @@ class FAB extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        ScreenShotListPage(screenShotImage: screenShotImage)),
+                    builder: (context) => ChangeNotifierProvider<
+                            ScreenShotViewModel>(
+                        create: (context) => ScreenShotViewModel(),
+                        // create: (context) -> screenViewModel() 하면 뒤로가기 잘됨..
+                        child: const ScreenShotListView())),
               );
             }),
       ],
