@@ -38,6 +38,8 @@ dependencies:
   intl: ^0.17.0
   localstorage: ^4.0.0+1
   indexed: ^0.0.8
+  device_info_plus: ^4.0.0
+  package_info_plus: ^1.0.6
   #shared_preferences: ^2.0.15
 
 dev_dependencies:

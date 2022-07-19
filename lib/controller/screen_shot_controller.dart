@@ -42,8 +42,7 @@ class ScreenShotImage implements ScreenShotController {
         ui.Image image = await boundary!.toImage();
         final directory = (await getApplicationDocumentsDirectory()).path;
         /* 이미지 저장할 폴더인 reporter 생성 */
-        Directory newDirectory =
-            await Directory('$directory/reporter').create(recursive: true);
+        await Directory('$directory/reporter').create(recursive: true);
         ByteData? byteData =
             await image.toByteData(format: ui.ImageByteFormat.png);
         Uint8List pngBytes = byteData!.buffer.asUint8List();

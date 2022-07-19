@@ -3,6 +3,7 @@ import 'package:flutter_reporter/controller/screen_shot_controller.dart';
 import 'components/debug_fab.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+import 'test_app.dart';
 
 void main() {
   runApp(const MyApp());
@@ -63,9 +64,6 @@ class MyHomePage extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
 
       body: SafeArea(
@@ -76,9 +74,7 @@ class MyHomePage extends State<MainPage> {
                 return MaterialPageRoute(
                     builder: (context) => RepaintBoundary(
                         key: screenShotImage.getGlobalKey(),
-                        child: TestApp(
-                            screenWidth: screenWidth,
-                            screenHeight: screenHeight)));
+                        child: const TestApp()));
               },
             ),
             Positioned(
@@ -91,109 +87,5 @@ class MyHomePage extends State<MainPage> {
 
       ),
     );
-  }
-}
-
-class TestApp extends StatelessWidget {
-  const TestApp({
-    Key? key,
-    required this.screenWidth,
-    required this.screenHeight,
-  }) : super(key: key);
-
-  final double screenWidth;
-  final double screenHeight;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: screenWidth,
-        height: screenHeight,
-        decoration: BoxDecoration(color: Colors.purple.shade100),
-        child: Column(
-          children: [
-            const Text("테스트 화면1입니다"),
-            TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TestApp2(
-                            screenWidth: screenWidth,
-                            screenHeight: screenHeight)),
-                  );
-                },
-                child: Text("다음페이지로"))
-          ],
-        ));
-  }
-}
-
-class TestApp2 extends StatelessWidget {
-  const TestApp2({
-    Key? key,
-    required this.screenWidth,
-    required this.screenHeight,
-  }) : super(key: key);
-
-  final double screenWidth;
-  final double screenHeight;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: screenWidth,
-        height: screenHeight,
-        decoration: BoxDecoration(color: Colors.yellow),
-        child: Column(
-          children: [
-            const Text("테스트 화면2입니다"),
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text("전페이지로")),
-            TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TestApp3(
-                            screenWidth: screenWidth,
-                            screenHeight: screenHeight)),
-                  );
-                },
-                child: Text("다음페이지로"))
-          ],
-        ));
-  }
-}
-
-class TestApp3 extends StatelessWidget {
-  const TestApp3({
-    Key? key,
-    required this.screenWidth,
-    required this.screenHeight,
-  }) : super(key: key);
-
-  final double screenWidth;
-  final double screenHeight;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: screenWidth,
-        height: screenHeight,
-        decoration: BoxDecoration(color: Colors.orange),
-        child: Column(
-          children: [
-            const Text("테스트 화면3입니다"),
-            TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text("전페이지로"))
-          ],
-        ));
   }
 }

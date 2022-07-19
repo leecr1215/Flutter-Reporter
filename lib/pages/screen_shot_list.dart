@@ -7,6 +7,7 @@ import 'bug_report_write.dart';
 import 'package:localstorage/localstorage.dart';
 import '../controller/bug_report_list_loader.dart';
 import 'bug_report_list.dart';
+import '../controller/metadata_controller.dart';
 
 class ScreenShotListPage extends StatefulWidget {
   final ScreenShotImage screenShotImage;
@@ -29,13 +30,16 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
   Map<String, dynamic> map = {};
 
   late BugReport bugReport;
+  late DeviceMetaData deviceMetaData;
+  late AppMetaData appMetaData;
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
     waitStorageReady();
     bugReport = BugReport();
-
+    deviceMetaData = DeviceMetaData();
+    appMetaData = AppMetaData();
     super.initState();
   }
 
@@ -97,7 +101,7 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
 
   @override
   GridView showScreenShotList() {
-    // TODO: 스크린샷 리스트 조회 child
+    // 스크린샷 리스트 조회 child
     final List<File> imagePaths = widget.screenShotImage.getImagePaths();
     return GridView.builder(
       itemCount: imagePaths.length,
@@ -114,7 +118,10 @@ class _ScreenShotListPageState extends State<ScreenShotListPage>
                 context,
                 MaterialPageRoute(
                     builder: (context) => BugReportWrite(
-                        screenShotImage: widget.screenShotImage, index: index)),
+                          screenShotImage: widget.screenShotImage,
+                          index: index,
+                          deviceMetaData: deviceMetaData,
+                        )),
               );
             },
             child: Image.file(
