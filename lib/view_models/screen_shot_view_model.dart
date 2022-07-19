@@ -10,8 +10,6 @@ import 'dart:typed_data';
 import 'package:intl/intl.dart';
 import 'dart:ui' as ui;
 
-//final ScreenShotImage screenShotImage = ScreenShotImage();
-
 class ScreenShotViewModel with ChangeNotifier {
   static final ScreenShotImage screenShotImage = ScreenShotImage();
   bool _disposed = false;
@@ -23,7 +21,6 @@ class ScreenShotViewModel with ChangeNotifier {
           file.map((file) => imagePaths.add(file)).toList(),
           screenShotImage.imagePaths = imagePaths,
         });
-    //notifyListeners();
   }
 
   ScreenShotImage get getScreenShotImage => screenShotImage;

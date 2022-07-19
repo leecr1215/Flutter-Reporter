@@ -8,9 +8,6 @@ class BugReportListView extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  //late BugReportListViewModel viewModel;
-  //final BugReport bugReport = BugReport();
-
   @override
   Widget build(BuildContext context) {
     BugReportListViewModel viewModel = Provider.of<BugReportListViewModel>(

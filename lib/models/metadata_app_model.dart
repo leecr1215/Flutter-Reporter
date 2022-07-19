@@ -5,10 +5,7 @@ class AppMetaData with ChangeNotifier {
   String? packageName;
   String? version;
   String? buildNumber;
-  // late String appName;
-  // late String packageName;
-  // late String version;
-  // late String buildNumber;
+
   AppMetaData({this.appName, this.buildNumber, this.packageName, this.version});
 
   String? get getAppName => appName;
