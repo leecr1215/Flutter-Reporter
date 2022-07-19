@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reporter/components/back_fab.dart';
-import 'package:flutter_reporter/pages/report_list_page.dart';
 import 'package:flutter_reporter/view_models/metadata_app_view_model.dart';
 import 'package:flutter_reporter/view_models/metadata_device_view_model.dart';
 import 'package:flutter_reporter/view_models/metadata_view_model.dart';
+import 'package:flutter_reporter/view_models/report_list_view_model.dart';
 import 'package:flutter_reporter/view_models/report_write_view_model.dart';
 import 'package:flutter_reporter/view_models/screen_shot_view_model.dart';
+import 'package:flutter_reporter/views/report_list_view.dart';
 import 'package:flutter_reporter/views/report_write_view.dart';
 import 'dart:io';
 import 'package:localstorage/localstorage.dart';
@@ -72,7 +73,12 @@ class _ScreenShotListViewState extends State<ScreenShotListView>
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
-                    children: [showScreenShotList(), const BugReportListPage()],
+                    children: [
+                      showScreenShotList(),
+                      ChangeNotifierProvider<BugReportListViewModel>(
+                          create: (_) => BugReportListViewModel(),
+                          child: const BugReportListView())
+                    ],
                   ),
                 ),
               ],
