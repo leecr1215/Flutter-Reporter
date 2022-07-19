@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_reporter/components/back_fab.dart';
-import 'package:flutter_reporter/models/report_item_model.dart';
-import 'package:flutter_reporter/models/report_list_model.dart';
 import 'package:flutter_reporter/view_models/metadata_app_view_model.dart';
 import 'package:flutter_reporter/view_models/metadata_device_view_model.dart';
 import 'package:flutter_reporter/view_models/metadata_view_model.dart';
 import 'package:flutter_reporter/view_models/report_write_view_model.dart';
 import 'package:flutter_reporter/view_models/screen_shot_view_model.dart';
-import 'package:intl/intl.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
 
 class BugReportWriteView extends StatefulWidget {
@@ -24,17 +20,6 @@ class BugReportWriteView extends StatefulWidget {
 
 class _BugReportWriteViewState extends State<BugReportWriteView>
     with SingleTickerProviderStateMixin {
-  // final BugReportList list = BugReportList();
-  // final LocalStorage storage = LocalStorage('bug_report.json');
-  // final titleController = TextEditingController();
-  // final contentController = TextEditingController();
-  // final authorController = TextEditingController();
-
-  // String title = "";
-  // String content = "";
-  // String author = "";
-  // String currentTime = "";
-
   late MetaDataViewModel metaDataViewModel;
   late ScreenShotViewModel screenShotViewModel;
   late AppMetaDataViewModel appModel;
