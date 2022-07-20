@@ -20,13 +20,14 @@ class MainView extends State<Home> {
       body: SafeArea(
         child: Stack(
           children: [
-            Navigator(
-              onGenerateRoute: (routeSettings) {
-                return MaterialPageRoute(
-                    builder: (context) => RepaintBoundary(
-                        key: screenShotViewModel.getScreenShotImage.globalKey,
-                        child: const TestApp()));
-              },
+            RepaintBoundary(
+              key: screenShotViewModel.getScreenShotImage.globalKey,
+              child: Navigator(
+                onGenerateRoute: (routeSettings) {
+                  return MaterialPageRoute(
+                      builder: (context) => const TestApp());
+                },
+              ),
             ),
             Positioned(
               bottom: 15,
