@@ -10,8 +10,8 @@ ScreenShotViewModel screenShotViewModel = ScreenShotViewModel();
 class MainView extends State<Home> {
   @override
   void initState() {
-    screenShotViewModel.getImagePaths();
     super.initState();
+    screenShotViewModel.getImagePaths();
   }
 
   @override

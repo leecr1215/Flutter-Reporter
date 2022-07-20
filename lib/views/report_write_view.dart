@@ -57,7 +57,8 @@ class _BugReportWriteViewState extends State<BugReportWriteView>
                   Padding(
                     padding: EdgeInsets.all(space),
                     child: Image.file(
-                      screenShotViewModel.getScreenShotImage.imagePaths[0],
+                      screenShotViewModel
+                          .getScreenShotImage.imagePaths[widget.index],
                       width: screenWidth * 0.6,
                       height: screenHeight * 0.4,
                       fit: BoxFit.contain,
@@ -284,7 +285,7 @@ class _BugReportWriteViewState extends State<BugReportWriteView>
   }
 
   void saveItems() {
-    reportWriteModel.saveItems(screenShotViewModel.getImageFile(0));
+    reportWriteModel.saveItems(screenShotViewModel.getImageFile(widget.index));
     // 빈칸 없는지 확인
     if (reportWriteModel.title == "" ||
         reportWriteModel.author == "" ||
